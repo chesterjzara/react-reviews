@@ -10,6 +10,7 @@ const mapStyles = {
     }
 };
 
+//changess that are bad
 
 class CurrentLocation extends React.Component {
     constructor(props) {
@@ -75,7 +76,7 @@ class CurrentLocation extends React.Component {
 
             const node = ReactDOM.findDOMNode(mapRef);
 
-            let {zoom } = this.props;
+            let { zoom } = this.props;
             const { lat, lng } = this.state.currentLocation
             const center = new maps.LatLng(lat, lng)
             const mapConfig = Object.assign( 

@@ -57,17 +57,6 @@ export class MapContainer extends Component {
                 yesIWantToUseGoogleMapApiInternals
                 onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
             >
-                {/* < Marker    
-                    onClick={this.onMarkerClick}
-                    name={'Kenyatta International My Text'}
-                />
-                < InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}
-                    onClose={this.onClose}
-                >
-                    <div> <h4>{this.state.selectedPlace.name} </h4> </div>
-                </InfoWindow> */}
             </ CurrentLocation >
         );
     }
