@@ -8,58 +8,131 @@ import './App.css';
 import Button from 'react-bootstrap/Button';
 
 // Child Components
-import UserAccess from './components/UserAccess'
+import UserAuth from './components/UserAuth'
 import About from './components/About'
-import Map from './components/Map'
+import MapContainer from './components/MapContainer'
+import Friends from './components/Friends'
+import FriendSingle from './components/FriendSingle';
+
+// Constants
+const baseAPI = 'http://localhost:3000'
 
 class App extends Component {
   	constructor(props) {
-		  super(props)
+		super(props)
+		this.state = {
+			current_user : null,
+			loginUser: null,
+		}
 	}
 
-	renderUserAccess(props) {
-		return (
-			<UserAccess {...props} test={'testomg'} />
-		)
+	// Login and Registration Methods
+	handleLogin = async (loginInfo) => {
+		console.log('Login:', loginInfo)
+		let loginRes = await fetch(baseAPI + `/users/login`, {
+			method: 'POST',
+			body: JSON.stringify(loginInfo),
+			// withCredentials: true,
+			// credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json'
+			}
+		})
+		let jsonLogin = await loginRes.json()
+		console.log('Login response:', jsonLogin)
+		if(jsonLogin.auth) {
+			localStorage.setItem('reviews-jwt', jsonLogin.token)
+			this.setState({
+				loginUser: jsonLogin.user_id,
+			})
+		} 
+		return jsonLogin
 	}
-	renderMap(props) {
+	handleRegister = async (regInfo) => {
+		console.log('Register:',regInfo)
+		let regRes = await fetch(baseAPI + `/users/new`, {
+			method: 'POST',
+			body: JSON.stringify(regInfo),
+			// withCredentials: true,
+			// credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json'
+			}
+		})
+		let jsonReg = await regRes.json()
+		if(!jsonReg.status) {
+			localStorage.setItem('reviews-jwt', jsonReg.token)
+			this.setState({
+				loginUser: jsonReg.user.user_id,
+			})
+		}
+		return jsonReg
+		
+	}
+	handleLoggedInUser = async (token) => {
+		console.log('Will handle user with saved token')
+		
+		let checkTokenRes = await fetch(baseAPI + `/users/me`, {
+			method: 'GET',
+			withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : token
+			}
+		})
+		let jsonToken = await checkTokenRes.json()
+		if(jsonToken.auth) {
+			this.setState({
+				loginUser: jsonToken.user.user_id
+			})
+		}
+	}
+	renderUserAuth(props) {
 		return (
-			<Map {...props} 
-				id="myMap"
-				options={ {
-					center: { lat: 41.898801, lng: -87.674901 },
-					zoom: 12
-				}}
-				//41.898801, 
-
-				onMapLoad={map => {
-					// let marker = new window.google.maps.Marker({
-					// 	position: { lat: 41.0082, lng: 28.9784 },
-					// 	map: map,
-					// 	title: 'Hello Istanbul!'
-					// })
-				}}
+			< UserAuth
+				handleLogin={this.handleLogin}
+				handleRegister={this.handleRegister}
+				{...props}
 			/>
 		)
+	}
+
+	// Friends Methods and Components
+	renderFriends(props) {
+		return (
+			< Friends 
+				{...props}
+			/>
+		)
+	}
+
+
+	componentDidMount() {
+		if(localStorage.getItem('reviews-jwt') != null) {
+			this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
+		}
 	}
 
 	render() {
 		return (
 			<div>
 				<h1>Home</h1>
-				
+				<p>Logged in user: {this.state.loginUser}</p>
 				<Router>
 					<Switch>
-						<Route 
-							path='/map' 
-							render={(props) => this.renderMap(props) }  
-						/>
-						<Route 
-							path="/users" 
-							render={(props) =>  this.renderUserAccess(props)}
-						/>
+						<Route path='/map' component={MapContainer}  />
+						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
+						
+						<Route path="/friends/:user_id" component={FriendSingle} />
+						
+						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
 						<Route path="/about" component={About} />
-						<Route path="/" />
+						
+						{/* <Route path="/" component={Welcome} /> */}
 					</Switch>
 	 			</Router>
 			 </div>
