@@ -82,7 +82,7 @@ class App extends Component {
 		
 	}
 	handleLoggedInUser = async (token) => {
-		console.log('Will handle user with saved token')
+		console.log('Logging in user with saved token...')
 		
 		let checkTokenRes = await fetch(baseAPI + `/users/me`, {
 			method: 'GET',
@@ -96,9 +96,10 @@ class App extends Component {
 		})
 		let jsonToken = await checkTokenRes.json()
 		if(jsonToken.auth) {
-			this.setState({
+			let stateTest = await this.setState({
 				loginUser: jsonToken.user.user_id
 			})
+			console.log('Set login user:', this.state.loginUser)
 		}
 	}
 	renderUserAuth(props) {
@@ -132,10 +133,15 @@ class App extends Component {
 	}
 
 
-	componentDidMount() {
+	componentWillMount() {
 		if(localStorage.getItem('reviews-jwt') != null) {
 			this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
 		}
+	}
+	componentDidMount() {
+		// if(localStorage.getItem('reviews-jwt') != null) {
+		// 	this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
+		// }
 	}
 
 	render() {
