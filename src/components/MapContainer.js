@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import { Map, GoogleApiWrapper } from 'google-maps-react';
 import { InfoWindow, Marker } from 'google-maps-react';
 
+
 import CurrentLocation from './CurrentLocation'
+
+require('dotenv').config()
 
 const mapStyles = {
     width: '100%',
@@ -46,6 +49,7 @@ export class MapContainer extends Component {
 
     render() {
         console.log('MapContainer Render - google:', this.props.google)
+        console.log('key?',process.env.REACT_APP_DEV_GOOGLE_API_KEY)
         return (
             < CurrentLocation
                 centerAroundCurrentLocation
