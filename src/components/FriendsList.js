@@ -64,9 +64,13 @@ class FriendsList extends Component {
         let pageNumbers = this.getPaginationNumbers()
 
         if(this.props.loginUser === null) {
-			return <Redirect to='/users' />
+            console.log('No login user, redirecting...')
+            return (
+                <h2><Link to='/users'> Please Sign in to view Friends. </Link> </h2>
+                
+            )
         }
-        
+
         return (
             <div className="friends-list">
                 <h1>Friends List</h1>

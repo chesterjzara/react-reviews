@@ -30,35 +30,13 @@ class App extends Component {
 	}
 
 	// Login and Registration Methods
-	handleLogin = async (loginInfo) => {
-		console.log('Login:', loginInfo)
-		try {
-			let loginRes = await fetch(baseAPI + `/users/login`, {
-				method: 'POST',
-				body: JSON.stringify(loginInfo),
-				// withCredentials: true,
-				// credentials: 'include',
-				headers: {
-					'Accept': 'application/json, text/plain, */*',
-					'Content-Type': 'application/json'
-				}
-			})
-			let jsonLogin = await loginRes.json()
-			console.log('Login response:', jsonLogin)
-			if(jsonLogin.auth) {
-				localStorage.setItem('reviews-jwt', jsonLogin.token)
-				this.setState({
-					loginUser: jsonLogin.user_id,
-				})
-			} 
-			return jsonLogin
-		} catch (e) {
-			return {
-				auth: false,
-				message: 'Unable to login, try again.'
-			}
-		}
+	handleSetLoginUser = async (jsonInfo) => {
+		localStorage.setItem('reviews-jwt', jsonInfo.token)
+		this.setState({
+			loginUser: jsonInfo.user_id
+		})
 	}
+	
 	handleRegister = async (regInfo) => {
 		console.log('Register:',regInfo)
 		let regRes = await fetch(baseAPI + `/users/new`, {
@@ -82,7 +60,7 @@ class App extends Component {
 		
 	}
 	handleLoggedInUser = async (token) => {
-		console.log('Will handle user with saved token')
+		console.log('Logging in user with saved token...')
 		
 		let checkTokenRes = await fetch(baseAPI + `/users/me`, {
 			method: 'GET',
@@ -96,9 +74,10 @@ class App extends Component {
 		})
 		let jsonToken = await checkTokenRes.json()
 		if(jsonToken.auth) {
-			this.setState({
+			let stateTest = await this.setState({
 				loginUser: jsonToken.user.user_id
 			})
+			console.log('Set login user:', this.state.loginUser)
 		}
 	}
 	renderUserAuth(props) {
@@ -106,6 +85,7 @@ class App extends Component {
 			< UserAuth
 				handleLogin={this.handleLogin}
 				handleRegister={this.handleRegister}
+				handleSetLoginUser={this.handleSetLoginUser}
 				{...props}
 			/>
 		)
@@ -132,10 +112,15 @@ class App extends Component {
 	}
 
 
-	componentDidMount() {
+	componentWillMount() {
 		if(localStorage.getItem('reviews-jwt') != null) {
 			this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
 		}
+	}
+	componentDidMount() {
+		// if(localStorage.getItem('reviews-jwt') != null) {
+		// 	this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
+		// }
 	}
 
 	render() {
