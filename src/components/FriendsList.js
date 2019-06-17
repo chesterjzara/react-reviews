@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Redirect } from 'react-router-dom'
+import { Link } from "react-router-dom";
+// import { Redirect } from 'react-router-dom'
+// import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
 
 import FriendSingle from './FriendSingle'
+
+import { baseAPI} from '../App'
 
 class FriendsList extends Component {
     constructor(props) {
         super(props)
         this.state = {
             currentPage : 1,
-            itemPerPage : 4
+            itemPerPage : 4,
+            friendArray: []
         }
     }
   
@@ -21,9 +26,29 @@ class FriendsList extends Component {
         })
     }
 
-    getPaginationNumbers = () => {
+    getFriendList = async () => {
+        console.log('have login user in list', this.props.loginUser)
+
+        let friendListRes = await fetch(baseAPI + '/friends', {
+            method: 'GET',
+            withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+        })
+        let jsonFriends = await friendListRes.json()
+        console.log(jsonFriends)
+        this.setState({
+            friendArray: jsonFriends
+        })
+    }
+
+    getPaginationNumbers = (array) => {
         const {currentPage, itemPerPage} = this.state
-        const maxPages = Math.ceil(this.props.list.length / itemPerPage)
+        const maxPages = Math.ceil(array.length / itemPerPage)
 
         let pageNumbers = [currentPage]
         let counter = 1
@@ -55,21 +80,19 @@ class FriendsList extends Component {
         
         return pageNumbers
 }
+    componentWillMount() {
+        this.getFriendList()
+    }
 
     render() {
+        
         let cutoffItem = this.state.currentPage * this.state.itemPerPage
         let firstItem = cutoffItem - this.state.itemPerPage
-        let itemsToDisplay = this.props.list.slice(firstItem, cutoffItem);
+        let itemsToDisplay = this.state.friendArray.slice(firstItem, cutoffItem);
 
-        let pageNumbers = this.getPaginationNumbers()
+        let pageNumbers = this.getPaginationNumbers(this.state.friendArray)
 
-        if(this.props.loginUser === null) {
-            console.log('No login user, redirecting...')
-            return (
-                <h2><Link to='/users'> Please Sign in to view Friends. </Link> </h2>
-                
-            )
-        }
+        
 
         return (
             <div className="friends-list">
@@ -78,12 +101,11 @@ class FriendsList extends Component {
                     {itemsToDisplay.map((item, index) => {
                         return (
                             <li key={index}> 
-                                <Link to={`/friends/${item.id}`}> {item.name} </Link>
+                                <Link to={`/friends/${item.friend_id}`}> {item.first_name} {item.last_name} </Link> Status - {item.status} 
                             </li>
                         )
                     })}
                 </ul>
-                {/* < Route path="/friends/:id" component={FriendSingle} /> */}
 
                 <ul>
                     {pageNumbers.map((number, index) => {

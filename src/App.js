@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom'
 
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 // Bootstrap Components
-import Button from 'react-bootstrap/Button';
+// import Button from 'react-bootstrap/Button';
 
 // Child Components
 import UserAuth from './components/UserAuth'
@@ -13,19 +13,21 @@ import About from './components/About'
 import MapContainer from './components/MapContainer'
 import Friends from './components/Friends'
 import FriendSingle from './components/FriendSingle';
+import ReviewNew from './components/ReviewNew'
 
 require('dotenv').config()
 
 
 // Constants
 const baseAPI = 'http://localhost:3000'
+export { baseAPI }
 
 class App extends Component {
   	constructor(props) {
 		super(props)
 		this.state = {
 			current_user : null,
-			loginUser: null,
+			loginUser: {},
 		}
 	}
 
@@ -33,31 +35,11 @@ class App extends Component {
 	handleSetLoginUser = async (jsonInfo) => {
 		localStorage.setItem('reviews-jwt', jsonInfo.token)
 		this.setState({
-			loginUser: jsonInfo.user_id
-		})
-	}
-	
-	handleRegister = async (regInfo) => {
-		console.log('Register:',regInfo)
-		let regRes = await fetch(baseAPI + `/users/new`, {
-			method: 'POST',
-			body: JSON.stringify(regInfo),
-			// withCredentials: true,
-			// credentials: 'include',
-			headers: {
-				'Accept': 'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
+			loginUser: {
+				user_id: jsonInfo.user_id,
+				user_token: jsonInfo.token
 			}
 		})
-		let jsonReg = await regRes.json()
-		if(!jsonReg.status) {
-			localStorage.setItem('reviews-jwt', jsonReg.token)
-			this.setState({
-				loginUser: jsonReg.user.user_id,
-			})
-		}
-		return jsonReg
-		
 	}
 	handleLoggedInUser = async (token) => {
 		console.log('Logging in user with saved token...')
@@ -74,17 +56,24 @@ class App extends Component {
 		})
 		let jsonToken = await checkTokenRes.json()
 		if(jsonToken.auth) {
-			let stateTest = await this.setState({
-				loginUser: jsonToken.user.user_id
+			this.setState({
+				loginUser: {
+					user_id: jsonToken.user.user_id,
+					user_token: token
+				}
 			})
 			console.log('Set login user:', this.state.loginUser)
 		}
 	}
+	handleLogOut = () => {
+		localStorage.removeItem('reviews-jwt')
+		this.setState({
+			loginUser: {}
+		})
+	}
 	renderUserAuth(props) {
 		return (
 			< UserAuth
-				handleLogin={this.handleLogin}
-				handleRegister={this.handleRegister}
 				handleSetLoginUser={this.handleSetLoginUser}
 				{...props}
 			/>
@@ -126,13 +115,19 @@ class App extends Component {
 	render() {
 		return (
 			<div>
-				<h1>Home</h1>
-				<p>Logged in user: {this.state.loginUser}</p>
 				<Router>
+					<h1><Link to='/'> Home </Link></h1>
+					<Link to='/users'> Signin/Reg </Link>
+					<Link to='/friends'> Friends </Link>
+					<Link to='/map'> Places </Link>
+					<a href="#" onClick={this.handleLogOut}> Log Out</a>
+					<p>Logged in user: {this.state.loginUser.user_id}</p>
+					
+				
 					<Switch>
 						<Route path='/map' component={MapContainer}  />
 						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
-						
+						<Route path='/reviews/new' component={ReviewNew}  />
 						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
 						
 						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />

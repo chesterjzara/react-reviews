@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
-const baseAPI = 'http://localhost:3000'
+import { baseAPI} from '../App'
 
 class UserAuth extends Component {
 	constructor(props) {
@@ -64,21 +64,6 @@ class UserAuth extends Component {
 	}
 	handleRegister = async (event) => {
 		event.preventDefault()
-		// let reg = await this.props.handleRegister({
-		// 	email : this.state.reg_email,
-		// 	first_name : this.state.reg_first_name,
-		// 	last_name : this.state.reg_last_name,
-		// 	password : this.state.reg_password,
-		// })
-		// console.log('back in handleRegister')
-		// console.log('Registered:', reg)
-		// this.setState( () => {
-		// 	return {
-		// 		toHome: reg.auth,
-		// 		error: reg.message
-		// 	}
-		// }, this.clearFields())
-
 		try {
 			let regInfo = {
 				email : this.state.reg_email,
