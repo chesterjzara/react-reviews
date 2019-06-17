@@ -13,6 +13,7 @@ import About from './components/About'
 import MapContainer from './components/MapContainer'
 import Friends from './components/Friends'
 import FriendSingle from './components/FriendSingle';
+import ReviewNew from './components/ReviewNew'
 
 require('dotenv').config()
 
@@ -126,7 +127,7 @@ class App extends Component {
 					<Switch>
 						<Route path='/map' component={MapContainer}  />
 						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
-						
+						<Route path='/reviews/new' component={ReviewNew}  />
 						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
 						
 						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />

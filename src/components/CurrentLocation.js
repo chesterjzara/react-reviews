@@ -1,92 +1,77 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Redirect } from 'react-router-dom'
+
 import SearchBox from './SearchBox';
+
 
 const mapStyles = {
     map: {
       position: 'absolute',
-      width: '100%',
-      height: '100%'
+      width: '80%',
+      height: '80%'
     }
 };
-
-//changess that are bad
 
 class CurrentLocation extends React.Component {
     constructor(props) {
         super(props)
-        let { lat, lng } = this.props.initialCenter
+        let { lat, lng } = { lat: 41.9033, lng: -87.667572 }
         this.state = {
             currentLocation: {
                 lat: lat,
                 lng: lng
             },
             currMarker: {},
-            currentPlace: {}
+            currentPlace: {},
+            toReviewNew: false
         }
         this.onPlacesChanged = this.onPlacesChanged.bind(this)
-        this.saveToUserPlaces = this.saveToUserPlaces.bind(this)
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevProps.google !== this.props.google) {
-            this.loadMap();
-        }
-        if (prevState.currentLocation !== this.state.currentLocation) { 
-            this.recenterMap();
-        }
+        // this.saveToUserPlaces = this.saveToUserPlaces.bind(this)
     }
 
     recenterMap() {
-        const map = this.map;
-        const current = this.state.currentLocation
-        const google = this.props.google
-        const maps = google.maps
+        console.log('Recenter Map')
+        // const map = this.map;
+        const currentLoc = this.state.currentLocation
+        // const google = google
+        // const maps = google.maps
+        const maps = this.props.google.maps
 
-        if(map) {
-            let center = new maps.LatLng(current.lat, current.lng)
-            map.panTo(center)
+        if(this.map) {
+            let center = new maps.LatLng(currentLoc.lat, currentLoc.lng)
+            this.map.panTo(center)
         }
-    }
-
-    componentDidMount() {
-        if(this.props.centerAroundCurrentLocation) {
-            if (navigator && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition( pos => {
-                    const coords = pos.coords
-                    this.setState({
-                        currentLocation: {
-                            lat: coords.latitude,
-                            lng: coords.longitude
-                        }
-                    })
-                })
-            }
-        }
-        this.loadMap()
     }
     
     loadMap() {
-        console.log('load map this:', this)
-        
+        console.log('Load Map - CurrentLocation this', this)
+    
         if(this.props && this.props.google) {
+            // Grabbing google, maps, zoom from the props for concise variable names
             const { google } = this.props
             const maps = google.maps
-            const mapRef = this.refs.map
-
-            const node = ReactDOM.findDOMNode(mapRef);
-
             let { zoom } = this.props;
+            
+            
+            // Grabs the map ref (set in the render below) to get the map's DOM Node
+            const mapRef = this.refs.map
+            const mapNode = ReactDOM.findDOMNode(mapRef);
+
+            // Check the current location and store a new center/zoom level in a config object
             const { lat, lng } = this.state.currentLocation
             const center = new maps.LatLng(lat, lng)
             const mapConfig = Object.assign( 
                 {},
                 {
                     center: center,
-                    zoom: zoom
+                    zoom: zoom,
+                    streetViewControl: false
                 }
-            );
-            this.map = new maps.Map(node, mapConfig)
+            )
+            // Use the above config object to create a new map object
+                // Saves it to this.map to access in other methods
+            this.map = new maps.Map(mapNode, mapConfig)
         }
     }
 
@@ -128,7 +113,7 @@ class CurrentLocation extends React.Component {
         // Open info window by default
         newInfoWindow.open(this.map, newMarker)
 
-        // Code to open info on marker click
+        // Code to open info on marker click - let it auto-open for now
         // newMarker.addListener('click', function(){
         //     newInfoWindow.open(this.map, newMarker)
         // })
@@ -140,11 +125,41 @@ class CurrentLocation extends React.Component {
         })
     }
 
-    saveToUserPlaces() {
+    saveToUserPlaces = () => {
         console.log('save to places')
         console.log(this.state.currentPlace)
+        this.setState({
+            toReviewNew : true
+        })
+
     }
 
+    componentDidMount() {
+        console.log('DidMount')
+        if (navigator && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition( pos => {
+                const coords = pos.coords
+                this.setState({
+                    currentLocation: {
+                        lat: coords.latitude,
+                        lng: coords.longitude
+                    }
+                })
+            })
+        }
+        this.loadMap()
+    }
+    componentDidUpdate(prevProps, prevState) {
+        console.log('DidUpdate', prevProps.google, this.props.google)
+        if (prevProps.google !== this.props.google) {
+            this.loadMap();
+        }
+        if (prevState.currentLocation !== this.state.currentLocation) { 
+            this.recenterMap();
+        }
+    }
+
+    // If this Component has any nested children, render them and pass needed props
     renderChildren() {
         const { children } = this.props;
 
@@ -161,7 +176,23 @@ class CurrentLocation extends React.Component {
     }
 
     render() {
-        const style = Object.assign({}, mapStyles.map);
+        console.log('Render...')
+
+        if(this.state.toReviewNew === true) {
+            // return < Redirect to='/reviews/new' />
+            return < Redirect to={{ 
+                pathname: '/reviews/new',
+                state: { 
+                    place_id : this.state.currentPlace.place_id,
+                    address : this.state.currentPlace.formatted_address,
+                    name : this.state.currentPlace.name,
+                    google_url : this.state.currentPlace.url
+                }
+            }} />
+        }
+
+
+        const style = { ...(mapStyles.map)}
         return (
             <div>
                 < SearchBox
@@ -170,9 +201,11 @@ class CurrentLocation extends React.Component {
                     onPlacesChanged={this.onPlacesChanged}
                 />
                 <button onClick={this.saveToUserPlaces}>Add to Places</button>
+                
                 <div style={style} ref="map">
                     Loading map...
                 </div>
+                
                 {this.renderChildren()}
             </div>
         );
@@ -180,10 +213,3 @@ class CurrentLocation extends React.Component {
 }
 
 export default CurrentLocation;
-    
-CurrentLocation.defaultProps = {
-    zoom: 14,
-    initialCenter: { lat: 41.9033, lng: -87.667572 },
-    centerAroundCurrentLocation: false,
-    visible: true
-};
