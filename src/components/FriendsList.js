@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Redirect } from 'react-router-dom'
 
 import FriendSingle from './FriendSingle'
 
@@ -62,6 +63,10 @@ class FriendsList extends Component {
 
         let pageNumbers = this.getPaginationNumbers()
 
+        if(this.props.loginUser === null) {
+			return <Redirect to='/users' />
+        }
+        
         return (
             <div className="friends-list">
                 <h1>Friends List</h1>

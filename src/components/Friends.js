@@ -25,6 +25,7 @@ class Friends extends Component {
                 </div>
                 < FriendsList
                     list={this.state.array}
+                    loginUser={this.props.loginUser}
                 />
 
             </div>

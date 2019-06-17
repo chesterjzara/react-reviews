@@ -14,6 +14,9 @@ import MapContainer from './components/MapContainer'
 import Friends from './components/Friends'
 import FriendSingle from './components/FriendSingle';
 
+require('dotenv').config()
+
+
 // Constants
 const baseAPI = 'http://localhost:3000'
 
@@ -29,25 +32,32 @@ class App extends Component {
 	// Login and Registration Methods
 	handleLogin = async (loginInfo) => {
 		console.log('Login:', loginInfo)
-		let loginRes = await fetch(baseAPI + `/users/login`, {
-			method: 'POST',
-			body: JSON.stringify(loginInfo),
-			// withCredentials: true,
-			// credentials: 'include',
-			headers: {
-				'Accept': 'application/json, text/plain, */*',
-				'Content-Type': 'application/json'
-			}
-		})
-		let jsonLogin = await loginRes.json()
-		console.log('Login response:', jsonLogin)
-		if(jsonLogin.auth) {
-			localStorage.setItem('reviews-jwt', jsonLogin.token)
-			this.setState({
-				loginUser: jsonLogin.user_id,
+		try {
+			let loginRes = await fetch(baseAPI + `/users/login`, {
+				method: 'POST',
+				body: JSON.stringify(loginInfo),
+				// withCredentials: true,
+				// credentials: 'include',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-Type': 'application/json'
+				}
 			})
-		} 
-		return jsonLogin
+			let jsonLogin = await loginRes.json()
+			console.log('Login response:', jsonLogin)
+			if(jsonLogin.auth) {
+				localStorage.setItem('reviews-jwt', jsonLogin.token)
+				this.setState({
+					loginUser: jsonLogin.user_id,
+				})
+			} 
+			return jsonLogin
+		} catch (e) {
+			return {
+				auth: false,
+				message: 'Unable to login, try again.'
+			}
+		}
 	}
 	handleRegister = async (regInfo) => {
 		console.log('Register:',regInfo)
@@ -105,7 +115,18 @@ class App extends Component {
 	renderFriends(props) {
 		return (
 			< Friends 
+				loginUser={this.state.loginUser}
 				{...props}
+				
+			/>
+		)
+	}
+	renderFriendSingle(props) {
+		return (
+			< FriendSingle 
+				loginUser={this.state.loginUser}
+				{...props}
+				
 			/>
 		)
 	}
@@ -127,7 +148,7 @@ class App extends Component {
 						<Route path='/map' component={MapContainer}  />
 						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
 						
-						<Route path="/friends/:user_id" component={FriendSingle} />
+						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
 						
 						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
 						<Route path="/about" component={About} />
