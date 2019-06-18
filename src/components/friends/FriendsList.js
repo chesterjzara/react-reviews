@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import FriendSingle from './FriendSingle'
 
-import { baseAPI} from '../App'
+import { baseAPI} from '../../App'
 
 class FriendsList extends Component {
     constructor(props) {
