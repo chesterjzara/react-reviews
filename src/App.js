@@ -100,6 +100,16 @@ class App extends Component {
 		)
 	}
 
+	// Places Methods and Components
+	renderReviewNew(props) {
+		return (
+			< ReviewNew 
+				loginUser={this.state.loginUser}
+				{...props}
+				
+			/>
+		)
+	}
 
 	componentWillMount() {
 		if(localStorage.getItem('reviews-jwt') != null) {
@@ -127,7 +137,8 @@ class App extends Component {
 					<Switch>
 						<Route path='/map' component={MapContainer}  />
 						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
-						<Route path='/reviews/new' component={ReviewNew}  />
+						{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
+						<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
 						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
 						
 						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
