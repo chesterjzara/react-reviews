@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // import { Redirect } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
-import { baseAPI } from '../App';
+import { baseAPI } from '../../App';
 
 class FriendSingle extends Component {
     constructor(props) {

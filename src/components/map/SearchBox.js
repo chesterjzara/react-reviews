@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 export default class SearchBox extends React.Component {
-    // static propTypes = {
-    //     placeholder: React.PropTypes.string,
-    //     onPlacesChanged: React.PropTypes.func
-    // }
     render() {
         return <input ref="input" placeholder={this.props.placeholder} type="text"/>;
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
-import { baseAPI } from '../App';
+import { baseAPI } from '../../App';
 
 import FriendsList from './FriendsList'
 

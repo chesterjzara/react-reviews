@@ -10,9 +10,13 @@ import './App.css';
 // Child Components
 import UserAuth from './components/UserAuth'
 import About from './components/About'
-import MapContainer from './components/MapContainer'
-import Friends from './components/Friends'
-import FriendSingle from './components/FriendSingle';
+
+import MapContainer from './components/map/MapContainer'
+
+import Friends from './components/friends/Friends'
+import FriendSingle from './components/friends/FriendSingle';
+
+import Places from './components/places/Places'
 import ReviewNew from './components/ReviewNew'
 
 require('dotenv').config()
@@ -129,18 +133,19 @@ class App extends Component {
 					<h1><Link to='/'> Home </Link></h1>
 					<Link to='/users'> Signin/Reg </Link>
 					<Link to='/friends'> Friends </Link>
-					<Link to='/map'> Places </Link>
+					<Link to='/places'> Places </Link>
 					<a href="#" onClick={this.handleLogOut}> Log Out</a>
 					<p>Logged in user: {this.state.loginUser.user_id}</p>
 					
 				
 					<Switch>
 						<Route path='/map' component={MapContainer}  />
+						<Route path='places' component={Places} />
 						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
 						{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
 						<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
+
 						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
-						
 						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
 						<Route path="/about" component={About} />
 						

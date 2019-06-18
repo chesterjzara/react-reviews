@@ -12,11 +12,8 @@ class ReviewNew extends Component {
 				value: '',
 				new: null
 			},
-			reviewText: ''
-			// place_id : this.props.location.state.place_id,
-			// address : this.props.location.state.address,
-			// name : this.props.location.state.name,
-			// google_url : this.props.location.state.google_url
+			reviewText: '',
+			rating: ''
 		}
 	}
 	
@@ -36,7 +33,8 @@ class ReviewNew extends Component {
 			google_url : google_url,
 			tag : this.state.inputValue.value,
 			new_tag : this.state.inputValue.new,
-			review_text : this.state.reviewText
+			review_text : this.state.reviewText,
+			rating: this.state.rating
 		}
 
 		let reviewRes = await fetch(baseAPI + `/places/new`, {
@@ -56,13 +54,12 @@ class ReviewNew extends Component {
 
 	handleInputChange = (newValue) => {
 		console.log(newValue)
-		const inputValue = (newValue.value).toLowerCase()
 		this.setState({ 
 			inputValue: {
-				value: inputValue,
+				value: newValue.value,
 				new: newValue.__isNew__
 			} });
-		return inputValue;
+		return newValue.label;
 	}
 	promiseOptions = (inputValue) => {
 		new Promise( () => {
@@ -109,6 +106,10 @@ class ReviewNew extends Component {
 						onChange={(opt) => this.handleInputChange(opt)}
 					/>
 					<h2>Review</h2>
+					<input type="number" id="rating" name="rating" min="1" max="10"
+						value={this.state.rating}
+						onChange={this.handleChange}
+					/>
 					<textarea id="reviewText" 
 						value={this.state.reviewText} 
 						onChange={this.handleChange}

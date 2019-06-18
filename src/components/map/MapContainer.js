@@ -17,29 +17,8 @@ export class MapContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            // showingInfoWindow: false,   //Hide/show infoWindow 
-            // activeMarker: {},           //Shows active marker
-            // selectedPlace: {}           // Shows infoWindow for selected palce on marker
         }
     }
-
-    // onMarkerClick = (props, marker, e) => {
-    //     this.setState({
-    //         selectedPlace: props,
-    //         activeMarker: marker,
-    //         showingInfoWindow: true
-    //     });
-    // }
-
-    // onClose = () => {
-    //     if (this.state.showingInfoWindow) {
-    //         this.setState({
-    //             showingInfoWindow: false,
-    //             activeMarker: null
-    //         });
-    //     }
-    // };
-
     render() {
         console.log('MapContainer Render - google:', this.props.google)
 
