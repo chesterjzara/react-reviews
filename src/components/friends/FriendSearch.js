@@ -1,11 +1,52 @@
 import React, { Component } from 'react'
+import { Link } from "react-router-dom";
+
+import { baseAPI } from '../../App';
 
 class FriendSearch extends Component {
 	constructor(props) {
 		super(props)
-		
+		this.state = {
+            searchName : '',
+            searchArray : []
+        }
 	}
+	handleChange = (event) => {
+		this.setState({
+			[event.target.id]: event.target.value
+		})
+    }
+    handleSearchSubmit = async (event) => {
+        event.preventDefault();
+        console.log('do search submit:',this.state.searchName)
+        let searchInfo = { searchTerm: this.state.searchName}
 
+        try{
+            let searchRes = await fetch(baseAPI + `/friends/search/new`, {
+                method: 'POST',
+                body: JSON.stringify(searchInfo),
+                withCredentials: true,
+			    credentials: 'include',
+			    headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			    }
+            })
+            let searchResults = await searchRes.json()
+            console.log(searchResults)
+            this.setState({
+                searchArray: searchResults,
+                searchName : ''
+
+            })
+
+        } catch(e) {
+            console.log('Search failed on server')
+        }
+        
+	}
+	
     render() {
       	return (
 			<div className="friend-search">

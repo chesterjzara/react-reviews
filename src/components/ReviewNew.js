@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
-import Select from 'react-select'
+import { Redirect } from 'react-router-dom'
+
+// Library to dynamic Select components
 import AsyncCreatableSelect from 'react-select/async-creatable';
-import AsyncSelect from 'react-select/async';
+// import AsyncSelect from 'react-select/async';
+// import Select from 'react-select'
+
 import { baseAPI } from '../App';
 
 class ReviewNew extends Component {
@@ -13,7 +17,9 @@ class ReviewNew extends Component {
 				new: null
 			},
 			reviewText: '',
-			rating: ''
+			rating: '',
+			toPlacesHome : false,
+			error: ''
 		}
 	}
 	
@@ -37,18 +43,31 @@ class ReviewNew extends Component {
 			rating: this.state.rating
 		}
 
-		let reviewRes = await fetch(baseAPI + `/places/new`, {
-			method: 'POST',
-			body: JSON.stringify(reviewInfo),
-			withCredentials: true,
-			credentials: 'include',
-			headers: {
-				'Accept': 'application/json, text/plain, */*',
-				'Content-Type': 'application/json',
-				'x-access-token' : this.props.loginUser.user_token
+		try {
+			let reviewRes = await fetch(baseAPI + `/places/new`, {
+				method: 'POST',
+				body: JSON.stringify(reviewInfo),
+				withCredentials: true,
+				credentials: 'include',
+				headers: {
+					'Accept': 'application/json, text/plain, */*',
+					'Content-Type': 'application/json',
+					'x-access-token' : this.props.loginUser.user_token
+				}
+			})
+			let jsonReview = await reviewRes.json()
+			if(!jsonReview.status) {
+				this.setState({
+					toPlacesHome: true
+				})
 			}
-		})
-		// Do something after saving to server... not sure what now
+		} catch (e) {
+			this.setState({
+				error: 'Unable to save review, try again'
+			})
+		}
+
+		
 
 	}
 
@@ -84,6 +103,10 @@ class ReviewNew extends Component {
 	}
 
 	render() {
+		if(this.state.toPlacesHome === true) {
+			return <Redirect to='/places' />
+		}
+		
 		// comment out this to test w/out Google Places API calls
 		const { place_id, address, name, google_url } = this.props.location.state
 
@@ -117,6 +140,12 @@ class ReviewNew extends Component {
 					></textarea>
 					<button type="submit">Save Review</button>
 				</form>
+
+				{ this.state.error ? 
+					<h2> {this.state.error} </h2>
+					: ''
+				}
+
 			</div>
 		)
 	}

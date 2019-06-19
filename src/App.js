@@ -6,10 +6,12 @@ import './App.css';
 
 // Bootstrap Components
 // import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container'
 
 // Child Components
 import UserAuth from './components/UserAuth'
 import About from './components/About'
+import Navigation from './components/Navigation'
 
 import MapContainer from './components/map/MapContainer'
 
@@ -32,6 +34,7 @@ class App extends Component {
 		this.state = {
 			current_user : null,
 			loginUser: {},
+			loading: true
 		}
 	}
 
@@ -59,15 +62,17 @@ class App extends Component {
 			}
 		})
 		let jsonToken = await checkTokenRes.json()
-		if(jsonToken.auth) {
-			this.setState({
-				loginUser: {
-					user_id: jsonToken.user.user_id,
-					user_token: token
-				}
-			})
-			console.log('Set login user:', this.state.loginUser)
-		}
+		
+		return jsonToken;
+		// if(jsonToken.auth) {
+		// 	this.setState({
+		// 		loginUser: {
+		// 			user_id: jsonToken.user.user_id,
+		// 			user_token: token
+		// 		}
+		// 	})
+		// 	console.log('Set login user:', this.state.loginUser)
+		// }
 	}
 	handleLogOut = () => {
 		localStorage.removeItem('reviews-jwt')
@@ -116,9 +121,30 @@ class App extends Component {
 	}
 
 	componentWillMount() {
-		if(localStorage.getItem('reviews-jwt') != null) {
-			this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
+		// if(localStorage.getItem('reviews-jwt') != null) {
+		// 	this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
+		// }
+		let storedToken = localStorage.getItem('reviews-jwt')
+		if(storedToken != null) {
+			this.handleLoggedInUser(storedToken)
+			.then( (data) => {
+				if(data.auth === true) {
+					this.setState({
+						loginUser: {
+							user_id: data.user.user_id,
+							user_token: storedToken
+						},
+						loading: false
+					})
+				}
+				
+			})
+		} else {
+			this.setState ({
+				loading: false
+			})
 		}
+		
 	}
 	componentDidMount() {
 		// if(localStorage.getItem('reviews-jwt') != null) {
@@ -127,30 +153,37 @@ class App extends Component {
 	}
 
 	render() {
+		if(this.state.loading === true) {
+			return (
+				<div className="loading-message">
+					<h1>Logging in user</h1>
+				</div>
+			)
+		}
+		
 		return (
 			<div>
 				<Router>
-					<h1><Link to='/'> Home </Link></h1>
-					<Link to='/users'> Signin/Reg </Link>
-					<Link to='/friends'> Friends </Link>
-					<Link to='/places'> Places </Link>
-					<a href="#" onClick={this.handleLogOut}> Log Out</a>
-					<p>Logged in user: {this.state.loginUser.user_id}</p>
-					
+					< Navigation 
+						handleLogOut={this.handleLogOut}
+						loginUser={this.state.loginUser}
+					/>
 				
-					<Switch>
-						<Route path='/map' component={MapContainer}  />
-						<Route path='places' component={Places} />
-						<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
-						{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
-						<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
-
-						<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
-						<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
-						<Route path="/about" component={About} />
-						
-						{/* <Route path="/" component={Welcome} /> */}
-					</Switch>
+					<Container>
+						<Switch>
+							<Route path='/map' component={MapContainer}  />
+							<Route path='/places' component={Places} />
+							<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
+							{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
+							<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
+	
+							<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
+							<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
+							<Route path="/about" component={About} />
+							
+							{/* <Route path="/" component={Welcome} /> */}
+						</Switch>
+					</Container>
 	 			</Router>
 			 </div>
 		)

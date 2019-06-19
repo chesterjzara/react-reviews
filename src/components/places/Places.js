@@ -1,8 +1,17 @@
 import React, { Component } from 'react'
 
 class Places extends Component {
-  render() {
-    return <h1>Places Home</h1>
-  }
+	constructor(props)  {
+		super(props)
+	}
+	render() {
+	    return (
+			< React.Fragment>
+				<h1>Places </h1>
+				
+			</React.Fragment>
+			
+    	)
+  	}
 }
 export default Places;

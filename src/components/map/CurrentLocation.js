@@ -90,7 +90,7 @@ class CurrentLocation extends React.Component {
         this.setState( prevState => {
             if(Object.keys(prevState.currMarker).length !== 0) {
                 // Updates the marker state to have no map specified (removes from map)
-                let updatedMarker = prevState.currMarker.setMap(null)
+                prevState.currMarker.setMap(null)
                 return {
                     currMarker: null
                 }

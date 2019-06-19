@@ -1,54 +1,133 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 
-import { baseAPI } from '../../App';
+import Container from 'react-bootstrap/Container'
 
-import FriendsList from './FriendsList'
+import FriendsList from './FriendList'
+import FriendSearch from './FriendSearch';
+import FriendRequests from './FriendRequests';
 
+import { baseAPI} from '../../App'
 
 class Friends extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            searchName : '',
-            searchArray : []
+            friendArray : [],
+            pendingArray : [],
+            sentArray : [],
+            loading: true
         }
     }
-    handleChange = (event) => {
-		this.setState({
-			[event.target.id]: event.target.value
-		})
-    }
-    handleSearchSubmit = async (event) => {
-        event.preventDefault();
-        console.log('do search submit:',this.state.searchName)
-        let searchInfo = { searchTerm: this.state.searchName}
 
-        try{
-            let searchRes = await fetch(baseAPI + `/friends/search/new`, {
-                method: 'POST',
-                body: JSON.stringify(searchInfo),
-                withCredentials: true,
-			    credentials: 'include',
-			    headers: {
+    acceptRequest = async (user_id) => {
+        let acceptRequestRes = await fetch(baseAPI + `/friends/request/confirm/${user_id}`,{
+            method: 'PUT',
+            credentials: 'include',
+			headers: {
 				'Accept': 'application/json, text/plain, */*',
 				'Content-Type': 'application/json',
 				'x-access-token' : this.props.loginUser.user_token
-			    }
-            })
-            let searchResults = await searchRes.json()
-            console.log(searchResults)
-            this.setState({
-                searchArray: searchResults,
-                searchName : ''
+			}
+        })
+        let jsonAccept = await acceptRequestRes.json()
+        console.log('Accepted request', jsonAccept)
+        this.getFriendList()
+    }
+    
 
+    updateStateReject = (array, arrayIndex, user_id) => {
+        console.log('params:', array, arrayIndex, user_id)
+        this.setState(prevState => {
+            
+            let friendIndex = prevState.friendArray.findIndex( (current, index, arr) => {
+                return current.friend_id === user_id;
             })
+            console.log('Friend index:', friendIndex)
 
-        } catch(e) {
-            console.log('Search failed on server')
-        }
+            prevState[array].splice(arrayIndex, 1)
+            if(friendIndex !== -1) {
+                prevState.friendArray.splice(friendIndex, 1)
+            }
+            return {
+                [array]: prevState[array],
+                friendArray : prevState.friendArray
+            }
+        })
+	  }
+
+	deleteFriend = async (user_id, arrayName, index) => {
+		let cancelRequestRes = await fetch(baseAPI + `/friends/delete/${user_id}`, {
+			method: 'DELETE',
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+		})
+		let jsonDelete = await cancelRequestRes.json()
+		console.log('Cancelled Request', jsonDelete)
+		this.updateStateReject(arrayName, index, user_id)
+    }
+    
+    getPendingAndSentRequests = async () => {
+		console.log('start get pend/sent')
+		let pendingRes = await fetch(baseAPI + '/friends/request/pending', {
+            method: 'GET',
+            withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+        })
+		let jsonPending = await pendingRes.json()
+		
+		let sentRes = await fetch(baseAPI + '/friends/request/sent', {
+            method: 'GET',
+            withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+        })
+		let jsonSent = await sentRes.json()
+		 
+		console.log('Pending',jsonPending)
+		console.log('Sent',jsonSent)
+		this.setState({
+			pendingArray : jsonPending,
+            sentArray : jsonSent,
+            loading: false
+		})
+	}
+    getFriendList = async () => {
+        let friendListRes = await fetch(baseAPI + '/friends', {
+            method: 'GET',
+            withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+        })
+        let jsonFriends = await friendListRes.json()
+        console.log(jsonFriends)
+        this.setState({
+            friendArray: jsonFriends
+        }, () => this.getPendingAndSentRequests())
+    }
+
+    componentWillMount() {
+        this.getFriendList()
         
     }
+
     render() {
         if(!this.props.loginUser.user_id) {
             console.log('No login user, redirecting...')
@@ -57,44 +136,34 @@ class Friends extends Component {
                 
             )
         }
-        
-        return (
-            <div className="friends-main">
-                {this.props.loginUser.user_id ? 
-                    < FriendsList
-                        loginUser={this.props.loginUser}
-                    />
-                    : ''
-                }
-                <div className="friend-search">
-                    <h1>Find Friends</h1>
-                    <form onSubmit={this.handleSearchSubmit}>
-                        <input type="text" placeholder='Search Name' id="searchName" onChange={this.handleChange} value={this.state.searchName}/>
-                        <input type="submit" value="Find"/>
-                    </form>
-                    <div>
-                        <ul>
-                            {this.state.searchArray.length < 1 ? 
-                                <li> No matches</li>
-                                :
-                                this.state.searchArray.map( (item, index) => {
-                                    return (
-                                        <li key={index}> 
-                                            <Link to={`/friends/${item.user_id}`}>
-                                        	    {item.first_name} {item.last_name}
-                                            </Link> 
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </div>
-                </div>
+        if (this.state.loading === false) {
+            return (
+                <div className="friends-main">
+                    {this.props.loginUser.user_id ? 
+                        <Container>
+                            < FriendRequests 
+                                loginUser={this.props.loginUser} 
+                                pendingArray={this.state.pendingArray}
+                                sentArray={this.state.sentArray}
+                                deleteFriend={this.deleteFriend}
+                                acceptRequest={this.acceptRequest}
 
+                            />
+                            < FriendsList 
+                                loginUser={this.props.loginUser}
+                                friendArray={this.state.friendArray} 
+                            />
+                            < FriendSearch loginUser={this.props.loginUser} />
+                        </Container>
+                        : ''
+                    }
                 
-
-            </div>
-        )
+                </div>
+            )
+        } else {
+            return ( <h2>Loading Friends... </h2> )
+        }
+        
   }
 }
 export default Friends;

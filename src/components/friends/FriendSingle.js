@@ -30,9 +30,8 @@ class FriendSingle extends Component {
 		this.setState({
 			viewedUser: jsonUser
 		})
-		
-		
 	}
+	
 	deleteFriend = async () => {
 		let user_id = this.props.match.params.user_id
 		let cancelRequestRes = await fetch(baseAPI + `/friends/delete/${user_id}`, {
