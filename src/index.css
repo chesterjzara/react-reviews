@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.place-image-container {
+  width: 100%;
+  height: 20vh;
+}
+.place-image-container > img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.friend-list-image-container {
+  width: 10vh;
+  height: 10vh;
+  border: 1px solid black;
+}
+.friend-list-image-container > img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}

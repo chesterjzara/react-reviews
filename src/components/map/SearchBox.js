@@ -3,7 +3,14 @@ import ReactDOM from 'react-dom';
 
 export default class SearchBox extends React.Component {
     render() {
-        return <input ref="input" placeholder={this.props.placeholder} type="text"/>;
+        return (
+            <input ref="input" 
+                style={{width: '100%'}} 
+                placeholder={this.props.placeholder} 
+                className="my-2"    
+                type="text"
+            />
+        );
     }
     onPlacesChanged = () => {
         if (this.props.onPlacesChanged) {

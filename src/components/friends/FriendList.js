@@ -5,6 +5,9 @@ import Pagination from 'react-bootstrap/Pagination'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Card from 'react-bootstrap/Card'
+
+import default_avatar from './default-avatar.png'
 
 // import { Redirect } from 'react-router-dom'
 // import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -17,7 +20,6 @@ class FriendsList extends Component {
         this.state = {
             currentPage : 1,
             itemPerPage : 4,
-            // friendArray: []
         }
     }
   
@@ -28,26 +30,6 @@ class FriendsList extends Component {
             currentPage : parseInt(event.target.id)
         })
     }
-
-    // getFriendList = async () => {
-    //     console.log('have login user in list', this.props.loginUser)
-
-    //     let friendListRes = await fetch(baseAPI + '/friends', {
-    //         method: 'GET',
-    //         withCredentials: true,
-	// 		credentials: 'include',
-	// 		headers: {
-	// 			'Accept': 'application/json, text/plain, */*',
-	// 			'Content-Type': 'application/json',
-	// 			'x-access-token' : this.props.loginUser.user_token
-	// 		}
-    //     })
-    //     let jsonFriends = await friendListRes.json()
-    //     console.log(jsonFriends)
-    //     this.setState({
-    //         friendArray: jsonFriends
-    //     })
-    // }
 
     getPaginationNumbers = (array) => {
         const {currentPage, itemPerPage} = this.state
@@ -86,14 +68,13 @@ class FriendsList extends Component {
         }
         
         return pageNumbers
-}
-    componentWillMount() {
-        // this.getFriendList()
     }
+
 
     render() {
         
-        let cutoffItem = this.state.currentPage * this.state.itemPerPage
+        let currentPage = this.state.currentPage
+        let cutoffItem = currentPage * this.state.itemPerPage
         let firstItem = cutoffItem - this.state.itemPerPage
         let itemsToDisplay = this.props.friendArray.slice(firstItem, cutoffItem);
 
@@ -103,24 +84,38 @@ class FriendsList extends Component {
         
 
         return (
-            <div className="friends-list">
-                <h1>Friends List</h1>
-                <ul>
-                    {itemsToDisplay.map((item, index) => {
-                        return (
-                            <li key={index}> 
-                                <Link to={`/friends/${item.friend_id}`}> {item.first_name} {item.last_name} </Link> Status - {item.status} 
-                            </li>
-                        )
-                    })}
-                </ul>
+            <div className="friends-list my-4">
+                <h3>Friends List</h3>
+                
+                {itemsToDisplay.map((item, index) => {
+                    return (
+                        <Card key={index} className="d-flex flex-row"> 
+                            <div className="friend-list-image-container">
+                                <img src={item.user_img ? item.user_img : default_avatar} alt=""/>
+                            </div>
+                            <Card.Body>
+                                <Card.Title> 
+                                    <Link to={`/friends/${item.friend_id}`}> {item.first_name} {item.last_name} </Link> 
+                                </Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">
+                                    {item.status}
+                                </Card.Subtitle>
+                            </Card.Body>
+                             
+                        </Card>
+                    )
+                })}
+                
 
                 {pageNumbers.length > 0 ? 
-                    <Container>
+                    <Container className="my-4">
                         <Pagination style={ {justifyContent: 'center'}}>
                             {pageNumbers.map((number, index) => {
                                 return (
-                                    <Pagination.Item key={index} onClick={this.pageClick} id={number}>
+                                    <Pagination.Item key={index} id={number}
+                                        onClick={this.pageClick} 
+                                        active={number === currentPage}
+                                    >
                                         {number}
                                     </Pagination.Item>
                                 )

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import ListGroup from 'react-bootstrap/ListGroup'
 
 import { baseAPI } from '../../App';
 
@@ -8,7 +9,8 @@ class FriendSearch extends Component {
 		super(props)
 		this.state = {
             searchName : '',
-            searchArray : []
+            searchArray : [],
+            attemptedSearch: false
         }
 	}
 	handleChange = (event) => {
@@ -37,8 +39,8 @@ class FriendSearch extends Component {
             console.log(searchResults)
             this.setState({
                 searchArray: searchResults,
-                searchName : ''
-
+                searchName : '',
+                attemptedSearch: true
             })
 
         } catch(e) {
@@ -48,29 +50,48 @@ class FriendSearch extends Component {
 	}
 	
     render() {
+        const {searchArray, attemptedSearch} = this.state
+        
+        // Logic to only show the "No Matches" after we do a search, not on load
+        let noMatchText = ''
+        if(searchArray.length < 1 && attemptedSearch) {
+            noMatchText = <li> No matches </li>
+        }
+
       	return (
 			<div className="friend-search">
-                    <h1>Find Friends</h1>
+                    <h3>Find New Friends</h3>
                     <form onSubmit={this.handleSearchSubmit}>
                         <input type="text" placeholder='Search Name' id="searchName" onChange={this.handleChange} value={this.state.searchName}/>
                         <input type="submit" value="Find"/>
                     </form>
                     <div>
-                        <ul>
-                            {this.state.searchArray.length < 1 ? 
-                                <li> No matches</li>
+                        <ListGroup>
+                            {searchArray.length < 1 ? 
+                                noMatchText
                                 :
-                                this.state.searchArray.map( (item, index) => {
+                                searchArray.map( (item, index) => {
+                                    let variant, dispStatus
+                                    if(item.status === 'pending') {
+                                        variant = 'warning'; dispStatus = 'Request sent!' 
+                                    }
+                                    else if(item.status === 'confirmed') {
+                                        variant = 'primary'; dispStatus = 'Friend'
+                                    }
+                                    else if (item.status === null) {
+                                        variant = 'light'; dispStatus = 'Not friended'
+                                    }
                                     return (
-                                        <li key={index}> 
+                                        <ListGroup.Item key={index} variant={variant}> 
                                             <Link to={`/friends/${item.user_id}`}>
                                         	    {item.first_name} {item.last_name}
                                             </Link> 
-                                        </li>
+                                            ({dispStatus})
+                                        </ListGroup.Item>
                                     )
                                 })
                             }
-                        </ul>
+                        </ListGroup>
                     </div>
                 </div>
     	)

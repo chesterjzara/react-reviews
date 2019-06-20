@@ -19,7 +19,8 @@ import Friends from './components/friends/Friends'
 import FriendSingle from './components/friends/FriendSingle';
 
 import Places from './components/places/Places'
-import ReviewNew from './components/ReviewNew'
+import ReviewNew from './components/places/ReviewNew'
+import PlaceSingle from './components/places/PlaceSingle';
 
 require('dotenv').config()
 
@@ -119,6 +120,23 @@ class App extends Component {
 			/>
 		)
 	}
+	renderPlaces(props) {
+		return (
+			< Places 
+				loginUser={this.state.loginUser}
+				{...props}
+				
+			/>
+		)
+	}
+	renderPlaceSingle(props) {
+		return (
+			< PlaceSingle
+				loginUser={this.state.loginUser}
+				{...props}
+			/>
+		)
+	}
 
 	componentWillMount() {
 		// if(localStorage.getItem('reviews-jwt') != null) {
@@ -172,8 +190,11 @@ class App extends Component {
 					<Container>
 						<Switch>
 							<Route path='/map' component={MapContainer}  />
-							<Route path='/places' component={Places} />
-							<Route path="/users" render={(props) =>  this.renderUserAuth(props)} />
+							
+							<Route path="/places/:place_id" render={(props) => this.renderPlaceSingle(props)} />
+							<Route path='/places' render={(props) => this.renderPlaces(props)} />
+														
+							<Route path="/users" render={(props) => this.renderUserAuth(props)} />
 							{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
 							<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
 	

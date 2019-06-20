@@ -2,14 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom'
 
+import Button from 'react-bootstrap/Button'
+
 import SearchBox from './SearchBox';
 
 
 const mapStyles = {
     map: {
-      position: 'absolute',
-      width: '80%',
-      height: '80%'
+    //   position: 'absolute',
+      width: '100%',
+      height: '100%'
     }
 };
 
@@ -66,7 +68,8 @@ class CurrentLocation extends React.Component {
                 {
                     center: center,
                     zoom: zoom,
-                    streetViewControl: false
+                    streetViewControl: false,
+                    mapTypeControl: false
                 }
             )
             // Use the above config object to create a new map object
@@ -99,8 +102,7 @@ class CurrentLocation extends React.Component {
         
         // Create info window
         let newInfoWindow = new google.maps.InfoWindow({
-            content:    `<h2> Test info window </h2>
-                        <h3> ${place.name} </h3>`
+            content:    `<h3> ${place.name} </h3>`
         })
         
         // Creates a new marker on the map with the search result
@@ -194,17 +196,22 @@ class CurrentLocation extends React.Component {
 
         const style = { ...(mapStyles.map)}
         return (
-            <div>
+            <div style={{ width: '100%', height: '50vh'}} >
+                
+                <h3 className="my-2">Find a place to review</h3>
+                
                 < SearchBox
                     google={this.props.google}
-                    placeholder='placeholder for box'
+                    placeholder='Enter a place to review!'
                     onPlacesChanged={this.onPlacesChanged}
                 />
-                <button onClick={this.saveToUserPlaces}>Add to Places</button>
+                
                 
                 <div style={style} ref="map">
                     Loading map...
                 </div>
+
+                <Button className="col-12 my-3 py-3" variant='success' onClick={this.saveToUserPlaces}>Add to Places</Button>
                 
                 {this.renderChildren()}
             </div>

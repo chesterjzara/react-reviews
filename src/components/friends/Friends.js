@@ -149,11 +149,12 @@ class Friends extends Component {
                                 acceptRequest={this.acceptRequest}
 
                             />
+                            < FriendSearch loginUser={this.props.loginUser} />
                             < FriendsList 
                                 loginUser={this.props.loginUser}
                                 friendArray={this.state.friendArray} 
                             />
-                            < FriendSearch loginUser={this.props.loginUser} />
+                            
                         </Container>
                         : ''
                     }

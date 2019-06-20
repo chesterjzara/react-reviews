@@ -19,16 +19,25 @@ class FriendRequests extends Component {
 	
 	render() {
 		console.log('Friend Request render')
+		const { pendingArray, sentArray } = this.props
+
+		if(pendingArray.length < 1 && sentArray.length < 1) {
+			return ''
+		}
+
 		return (
-			<Accordion>
+			<Accordion
+				className="my-3"
+			>
+			{pendingArray.length > 0 ? 
 				<Card>
 					<Accordion.Toggle as={Card.Header} eventKey="0">
-						Your Friends Requests ({this.props.pendingArray.length})
+						Your Friends Requests ({pendingArray.length})
 					</Accordion.Toggle>
 					<Accordion.Collapse eventKey="0">
 						<Card.Body>
 							<ListGroup variant="flush">
-								{this.props.pendingArray.map( (item, index) => { 
+								{pendingArray.map( (item, index) => { 
 									return (
 										<ListGroup.Item key={index}> 
 											< Row> 
@@ -51,14 +60,17 @@ class FriendRequests extends Component {
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
+				: ''
+			}
+			{sentArray.length > 0 ? 
 				<Card>
 					<Accordion.Toggle as={Card.Header} eventKey="1">
-						Your Sent Requests ({this.props.sentArray.length})
+						Your Sent Requests ({sentArray.length})
 					</Accordion.Toggle>
 					<Accordion.Collapse eventKey="1">
 						<Card.Body>
 							<ListGroup variant="flush">
-								{this.props.sentArray.map( (item, index) => { 
+								{sentArray.map( (item, index) => { 
 									return (
 										<ListGroup.Item key={index}>
 											< Row> 
@@ -80,6 +92,8 @@ class FriendRequests extends Component {
 						</Card.Body>
 					</Accordion.Collapse>
 				</Card>
+				: ''
+			}
 			</Accordion>
 		)
   	}	

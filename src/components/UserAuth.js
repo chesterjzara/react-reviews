@@ -28,9 +28,17 @@ class UserAuth extends Component {
 			validatedLog: false
 
 		}
+		this._isMounted = false;
 	}
 
-	
+	// Prevent changing UserAuth state once un-mounted
+	//https://stackoverflow.com/questions/52061476/cancel-all-subscriptions-and-asyncs-in-the-componentwillunmount-method-how/52061655
+	componentDidMount() {
+		this._isMounted = true
+	}
+	componentWillUnmount() {
+		this._isMounted = false;
+	 }
 
 	handleChange = (event) => {
 		this.setState({
@@ -51,8 +59,6 @@ class UserAuth extends Component {
 				let loginRes = await fetch(baseAPI + `/users/login`, {
 					method: 'POST',
 					body: JSON.stringify(loginInfo),
-					// withCredentials: true,
-					// credentials: 'include',
 					headers: {
 						'Accept': 'application/json, text/plain, */*',
 						'Content-Type': 'application/json'
@@ -61,7 +67,6 @@ class UserAuth extends Component {
 				let jsonLogin = await loginRes.json()
 				console.log('Login response:', jsonLogin)
 				if(jsonLogin.auth) {
-					// localStorage.setItem('reviews-jwt', jsonLogin.token)
 					this.props.handleSetLoginUser(jsonLogin)
 					this.setState({
 						toHome: true
@@ -78,7 +83,7 @@ class UserAuth extends Component {
 			}
 		}
 		
-		this.setState({ validatedLog: true })
+		this._isMounted && this.setState({ validatedLog: true })
 	}
 	handleRegister = async (event) => {
 		event.preventDefault()
@@ -147,21 +152,6 @@ class UserAuth extends Component {
 				}
 				
 				<h3 className="mt-3"> Register </h3>
-				{/* <form onSubmit={this.handleRegister}>
-					<input type="email" placeholder="Email" id='reg_email' 
-						value={this.state.reg_email} onChange={this.handleChange} />
-					
-					<input type="text" placeholder="First Name" id='reg_first_name' 
-						value={this.state.reg_first_name} onChange={this.handleChange} />
-					
-					<input type="text" placeholder="Last Name" id='reg_last_name' 
-						value={this.state.reg_last_name} onChange={this.handleChange} />
-					
-					<input type="password" placeholder="Password" id='reg_password' 
-						value={this.state.reg_password} onChange={this.handleChange}/>
-					
-					<input type="submit" value="Register"/>
-				</form> */}
 				
 				<Form
 					onSubmit={e => this.handleRegister(e)}

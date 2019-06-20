@@ -6,7 +6,15 @@ import AsyncCreatableSelect from 'react-select/async-creatable';
 // import AsyncSelect from 'react-select/async';
 // import Select from 'react-select'
 
-import { baseAPI } from '../App';
+import Form from 'react-bootstrap/Form'
+import FormGroup from 'react-bootstrap/FormGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert'
+
+import PlaceInfo from './PlaceInfo'
+
+import { baseAPI } from '../../App';
 
 class ReviewNew extends Component {
 	constructor(props){
@@ -60,8 +68,13 @@ class ReviewNew extends Component {
 				this.setState({
 					toPlacesHome: true
 				})
+			} else {
+				this.setState({
+					error: 'Unable to save review. Please make sure all fields are filled and try again'
+				})
 			}
 		} catch (e) {
+			console.log(e)
 			this.setState({
 				error: 'Unable to save review, try again'
 			})
@@ -80,24 +93,22 @@ class ReviewNew extends Component {
 			} });
 		return newValue.label;
 	}
-	promiseOptions = (inputValue) => {
-		new Promise( () => {
 
-		})
-	}
-	updateType = (value) => {
-		this.setState({typeId: value.id});
-	}
+	// updateType = (value) => {
+	// 	this.setState({typeId: value.id});
+	// }
 	getTypeOptions = (inputValue) => {
-		console.log('get type options')
-		// if(!inputValue) {
-		// 	return Promise.resolve({options: []});
-		// }
+		console.log('get type options',inputValue)
+
 		return fetch(baseAPI + `/places/tags`)
 			.then(res => res.json())
 			.then( json => {
 				console.log('json:',json)
 				let options = json
+				options = options.filter( (i) => {
+					return i.label.toLowerCase().includes(inputValue.toLowerCase())
+				});
+				console.log(options)
 				return options
 			})
 	}
@@ -112,15 +123,21 @@ class ReviewNew extends Component {
 
 		return (
 			<div className="new-review-container">
-				<h1>New Review</h1>
 				
-				{/* Remove all theses for testing without google Places input */}
-				<h2>Name: {name}</h2>
-				<h3>Address: {address} </h3>
-				<h3><a href={google_url}>Go to in Google Maps...</a></h3>
-				<p>{place_id}</p>
+				{ this.state.error ? 
+					<Alert variant="danger">{this.state.error} </Alert> 
+					: ''
+				}
 				
-				<form onSubmit={this.handleSubmit}>
+				<h2>New Review</h2>
+				< PlaceInfo 
+					place_name={name}
+					google_url={google_url}
+					address={address}
+					showStatsTags={false}
+				/>
+				
+				{/* <form onSubmit={this.handleSubmit}>
 					<h2>Category/Tag</h2>
 					<AsyncCreatableSelect 
 						cacheOptions
@@ -139,13 +156,47 @@ class ReviewNew extends Component {
 						placeholder="Add any review info for your friends."
 					></textarea>
 					<button type="submit">Save Review</button>
-				</form>
+				</form> */}
 
-				{ this.state.error ? 
-					<h2> {this.state.error} </h2>
-					: ''
-				}
+				<Form
+					onSubmit={this.handleSubmit}	
+				>
+					<Form.Group>
+						< FormLabel > Choose an existing Tag or enter a new Tag </FormLabel>
+						<AsyncCreatableSelect 
+							cacheOptions
+							loadOptions={this.getTypeOptions}
+							defaultOptions
+							onChange={(opt) => this.handleInputChange(opt)}
+							required
+						/>
+					</Form.Group>
 
+					<Form.Group>
+						<FormLabel>Rating (0-10)</FormLabel> <br/>
+						<input type="number" id="rating" 
+							name="rating" min="1" max="10"
+							value={this.state.rating}
+							onChange={this.handleChange}
+							placeholder='Enter a number rating 0 to 10'
+							className='col-12'
+							required
+						/>
+					</Form.Group>
+
+					<Form.Group>
+						<FormLabel>Review</FormLabel> <br/>
+						<textarea id="reviewText" 
+							value={this.state.reviewText} 
+							onChange={this.handleChange}
+							placeholder="Add any review info for your friends."
+							className='col-12'
+							style={{height : '20vh'}}
+							required
+						></textarea>
+					</Form.Group>
+					<Button type="submit">Save Review</Button>
+				</Form>
 			</div>
 		)
 	}
