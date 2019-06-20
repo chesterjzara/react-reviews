@@ -10,13 +10,13 @@ import { baseAPI } from '../../App';
 
 import PlaceInfo from './PlaceInfo'
 
-let photoRef = 'add in photo references from '
-let placeId= 'enter placeId here'
+// let photoRef = 'add in photo references from '
+// let placeId= 'enter placeId here'
 
-let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
+// let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
 
-let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}
-`
+// let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}
+// `
 
 class PlaceSingle extends Component {
     constructor(props) {
