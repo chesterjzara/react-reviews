@@ -30,9 +30,9 @@ class FriendSearch extends Component {
                 withCredentials: true,
 			    credentials: 'include',
 			    headers: {
-				'Accept': 'application/json, text/plain, */*',
-				'Content-Type': 'application/json',
-				'x-access-token' : this.props.loginUser.user_token
+                    'Accept': 'application/json, text/plain, */*',
+                    'Content-Type': 'application/json',
+                    'x-access-token' : this.props.loginUser.user_token
 			    }
             })
             let searchResults = await searchRes.json()

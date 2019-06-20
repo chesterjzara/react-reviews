@@ -26,6 +26,9 @@ class Navigation extends Component {
                             < LinkContainer to='/places'>
                                 < Nav.Link > Places </ Nav.Link>
                             </LinkContainer>
+                            < LinkContainer to='/about'>
+                                < Nav.Link > About </ Nav.Link>
+                            </LinkContainer>
                             {/* <NavDropdown title="Quick Actions" id="basic-nav-dropdown">
                                 <LinkContainer to="/map">
                                     <NavDropdown.Item >Add New Place</NavDropdown.Item>
@@ -43,12 +46,14 @@ class Navigation extends Component {
                             <LinkContainer to='/users'>
                                 < Nav.Link > Sign Up / Login </Nav.Link>
                             </LinkContainer>
+                            < LinkContainer to='/about'>
+                                < Nav.Link > About </ Nav.Link>
+                            </LinkContainer>
                         </React.Fragment>
+                        
                         }
-                        < LinkContainer to='/about'>
-                            < Nav.Link > About </ Nav.Link>
-                        </LinkContainer>
-                        < NavItem > user: {this.props.loginUser.user_id} </NavItem>
+                        
+                        {/* < NavItem > user: {this.props.loginUser.user_id} </NavItem> */}
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

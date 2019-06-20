@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 // Library to dynamic Select components
 import AsyncCreatableSelect from 'react-select/async-creatable';
@@ -12,25 +12,26 @@ import FormLabel from 'react-bootstrap/FormLabel';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'
 
+
 import PlaceInfo from './PlaceInfo'
 
 import { baseAPI } from '../../App';
 
-class ReviewNew extends Component {
+class ReviewEdit extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
 			inputValue: {
-				value: '',
+				value: this.props.location.state.tag_id,
 				new: null
 			},
-			reviewText: '',
-			rating: '',
+			reviewText: this.props.location.state.review,
+			rating: this.props.location.state.rating,
 			toPlacesHome : false,
 			error: ''
 		}
 	}
-	
+
 	handleChange = (event) => {
 		this.setState({
 			[event.target.id]: event.target.value
@@ -39,11 +40,12 @@ class ReviewNew extends Component {
 	handleSubmit = async (event) => {
 		event.preventDefault()
 		console.log("submit here")
-		const { place_id, address, name, google_url } = this.props.location.state
-		let reviewInfo = { 
+		const { entry_id, place_id, address, place_name, google_url } = this.props.location.state
+		let reviewUpdateInfo = { 
+			entry_id: entry_id,
 			place_id: place_id,
 			address: address,
-			name: name,
+			name: place_name,
 			google_url : google_url,
 			tag : this.state.inputValue.value,
 			new_tag : this.state.inputValue.new,
@@ -52,9 +54,9 @@ class ReviewNew extends Component {
 		}
 
 		try {
-			let reviewRes = await fetch(baseAPI + `/places/new`, {
-				method: 'POST',
-				body: JSON.stringify(reviewInfo),
+			let reviewRes = await fetch(baseAPI + `/places/update`, {
+				method: 'PUT',
+				body: JSON.stringify(reviewUpdateInfo),
 				withCredentials: true,
 				credentials: 'include',
 				headers: {
@@ -117,9 +119,9 @@ class ReviewNew extends Component {
 		if(this.state.toPlacesHome === true || !this.props.location.state) {
 			return <Redirect to='/places' />
 		}
-
+		
 		// comment out this to test w/out Google Places API calls
-		const { place_id, address, name, google_url } = this.props.location.state
+		const { place_id, address, place_name, google_url, tag_id, tag_name, rating, review } = this.props.location.state
 
 		return (
 			<div className="new-review-container">
@@ -128,35 +130,14 @@ class ReviewNew extends Component {
 					<Alert variant="danger">{this.state.error} </Alert> 
 					: ''
 				}
-				
-				<h2>New Review</h2>
+
+				<h2>Edit Review</h2>
 				< PlaceInfo 
-					place_name={name}
+					place_name={place_name}
 					google_url={google_url}
 					address={address}
 					showStatsTags={false}
 				/>
-				
-				{/* <form onSubmit={this.handleSubmit}>
-					<h2>Category/Tag</h2>
-					<AsyncCreatableSelect 
-						cacheOptions
-						loadOptions={this.getTypeOptions}
-						defaultOptions
-						onChange={(opt) => this.handleInputChange(opt)}
-					/>
-					<h2>Review</h2>
-					<input type="number" id="rating" name="rating" min="1" max="10"
-						value={this.state.rating}
-						onChange={this.handleChange}
-					/>
-					<textarea id="reviewText" 
-						value={this.state.reviewText} 
-						onChange={this.handleChange}
-						placeholder="Add any review info for your friends."
-					></textarea>
-					<button type="submit">Save Review</button>
-				</form> */}
 
 				<Form
 					onSubmit={this.handleSubmit}	
@@ -164,6 +145,7 @@ class ReviewNew extends Component {
 					<Form.Group>
 						< FormLabel > Choose an existing Tag or enter a new Tag </FormLabel>
 						<AsyncCreatableSelect 
+							defaultInputValue={tag_name}
 							cacheOptions
 							loadOptions={this.getTypeOptions}
 							defaultOptions
@@ -195,10 +177,15 @@ class ReviewNew extends Component {
 							required
 						></textarea>
 					</Form.Group>
-					<Button type="submit">Save Review</Button>
+					<Button type="submit" variant="success">Save Review</Button>
+					<Link to={{
+						pathname: `/places/${place_id}`
+					}} >
+						<Button variant="secondary"> Cancel </Button>
+					</Link>
 				</Form>
 			</div>
 		)
 	}
 }
-export default ReviewNew;
+export default ReviewEdit;

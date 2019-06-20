@@ -3,12 +3,13 @@ import React, { Component } from 'react'
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import pizza from './test_pizza.jpg'
 import { baseAPI } from '../../App';
 
 import PlaceInfo from './PlaceInfo'
+import Modal from 'react-bootstrap/Modal'
 
 // let photoRef = 'add in photo references from '
 // let placeId= 'enter placeId here'
@@ -26,10 +27,39 @@ class PlaceSingle extends Component {
             myPlaceInfo: null,
             friendPlaceInfo: [],
             allPlaceInfo: [],
-            activeTag: ''
+            activeTag: '',
+            modalShow: false,
+            toPlaces: false
         }
     }
     
+    handleModalClose = () => {
+		this.setState({ modalShow: false });
+	}
+	
+	handleModalShow = () => {
+		this.setState({ modalShow: true });
+    }
+    handleReviewDelete = async () => {
+        let entry_id = this.state.myPlaceInfo.entry_id
+        let deleteRes = await fetch(baseAPI + `/places/delete/${entry_id}`, {
+            method: 'DELETE',
+            withCredentials: true,
+			credentials: 'include',
+			headers: {
+				'Accept': 'application/json, text/plain, */*',
+				'Content-Type': 'application/json',
+				'x-access-token' : this.props.loginUser.user_token
+			}
+        })
+        let jsonDelete = await deleteRes.json()
+        console.log(jsonDelete)
+        if(!jsonDelete.status) {
+            this.setState({
+                toPlaces : true
+            })
+        }
+    }
     
     getPlacePhoto = () => {
         let place_id = this.props.match.params.place_id
@@ -119,6 +149,9 @@ class PlaceSingle extends Component {
         if(this.state.loading) {
             return <h1>Loading...</h1>
         }
+        if(this.state.toPlaces) {
+            return <Redirect to='/places' />
+        }
         
         let allReviews = this.state.allPlaceInfo
         const {address, google_url, place_id, place_name }= allReviews[0]
@@ -133,30 +166,22 @@ class PlaceSingle extends Component {
         let friendsReviews = this.state.friendPlaceInfo
         return (
 			<React.Fragment>
+                < Modal show={this.state.modalShow} onHide={this.handleModalClose}>
+					<Modal.Header closeButton>
+						<Modal.Title>Delete Review?</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>Are you sure you want to delete this review?</Modal.Body>
+					<Modal.Footer>
+						<Button variant="secondary" onClick={this.handleModalClose}>
+							Cancel
+						</Button>
+						<Button variant="primary" onClick={this.handleReviewDelete}>
+							Delete
+						</Button>
+					</Modal.Footer>
+				</Modal>
+
                 <Container>
-                    {/* <h1>  {place_name} </h1>
-                    <div className="place-image-container">
-                        <img src={pizza} alt=""/>
-                    </div>
-                    <a href={google_url}>Link to Google Maps</a>
-                    <h5> {address} </h5>
-                    <h5>Average Rating: {stats.avgRating} ({stats.totalReviews})</h5>
-                    <div className="m-2">
-                        Tags:
-                        {stats.tags.map((tag, index) => {
-                            return (
-                                <Button 
-                                    className='mx-2' 
-                                    key={index}
-                                    id={tag} 
-                                    variant={activeTag === tag ? 'dark' : 'outline-dark'}
-                                    onClick={this.toggleTag}
-                                >
-                                    {tag} 
-                                </Button>
-                            )
-                        })}
-                    </div> */}
                     <PlaceInfo 
                         place_name={place_name}
                         google_url={google_url}
@@ -177,8 +202,18 @@ class PlaceSingle extends Component {
                                         <span className="font-weight-bold">{myReview.rating}/10</span>
                                     </Card.Text>
                                     <div className="d-flex justify-content-around">
-                                        <Button variant="warning">Edit</Button>
-                                        <Button variant="danger">Delete</Button>
+                                        <Link to={{
+                                            pathname: `/reviews/edit`,
+                                            state: myReview
+                                        }}>
+                                            <Button variant="warning">Edit</Button>
+                                        </Link>
+                                        <Button 
+                                            variant="danger" 
+                                            onClick={this.handleModalShow}
+                                        >
+                                            Delete
+                                        </Button>
                                     </div>
                                 </Card.Body>
                             </Card>
