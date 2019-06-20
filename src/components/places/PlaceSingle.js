@@ -10,8 +10,13 @@ import { baseAPI } from '../../App';
 
 import PlaceInfo from './PlaceInfo'
 
-let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?` 
-let placeDetailsKey = `&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}`
+let photoRef = 'add in photo references from '
+let = 'enter placeId here'
+
+let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
+
+let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}
+`
 
 class PlaceSingle extends Component {
     constructor(props) {
@@ -217,4 +222,3 @@ class PlaceSingle extends Component {
 }
 export default PlaceSingle;
 
-// https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=CmRaAAAAemaNp8dqx6NI5s5SmLIRldHsCniLYha3NPkVqENu-4zEaluns3svYUXYMOK_KyHVDYfoAfB8n8yzx11kXq1vR4K4c2lWkOu3QKdjA4LwJK_YdMqzUV5ajuK5TMSFzauaEhANjzq7pT6qgCzujZLHVZDqGhTqTX0SSahxgTjlZyxipNFO2MNIYw&key=AIzaSyAqvhioG6Wn7uoyFIfWOlAiHyM5gJeFKEw
