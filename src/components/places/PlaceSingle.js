@@ -11,7 +11,7 @@ import { baseAPI } from '../../App';
 import PlaceInfo from './PlaceInfo'
 
 let photoRef = 'add in photo references from '
-let = 'enter placeId here'
+let placeId= 'enter placeId here'
 
 let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
 
