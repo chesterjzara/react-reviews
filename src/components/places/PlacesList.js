@@ -94,7 +94,7 @@ class PlacesList extends Component {
                     </Container>
                     : 
                     < Container >
-                        <h3>No friends yet :(</h3>
+                        <h3>No reviews found.</h3>
                     </Container>
 
                 }

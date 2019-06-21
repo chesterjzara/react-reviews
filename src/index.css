@@ -32,3 +32,16 @@ code {
   width: 100%;
   height: 100%;
 }
+
+.user-image-container {
+  width: 20vh;
+  height: 20vh;
+  border: 1px solid black;
+  border-radius: 50%
+}
+.user-image-container > img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%
+}

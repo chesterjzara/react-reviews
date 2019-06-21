@@ -76,7 +76,7 @@ class SearchResults extends Component {
     }
 
     getUserSearch = async (search_string)  => {
-        const userSearchRes = await fetch(baseAPI + `/friends/search/new`, {
+        const userSearchRes = await fetch(baseAPI + `/friends/search/fulltext`, {
             method: 'POST',
             body: JSON.stringify({ searchTerm: search_string}),
             withCredentials: true,
@@ -134,22 +134,21 @@ class SearchResults extends Component {
                         </InputGroup>
                     </Form.Group>
                 </Form>  
-                <p>{this.state.searchText}</p>
                 
-                    <div className="my-2">
-                        <Button className="col-6"
-                            variant={resultsToggle ? 'info' : 'outline-info'}
-                            onClick={this.toggleResultsType}
-                        >
-                            Places
-                        </Button>
-                        <Button className="col-6"
-                            variant={resultsToggle ? 'outline-info' : 'info'}
-                            onClick={this.toggleResultsType}
-                        >
-                            Users
-                        </Button>
-                    </div>
+                <div className="my-2">
+                    <Button className="col-6"
+                        variant={resultsToggle ? 'dark' : 'outline-dark'}
+                        onClick={this.toggleResultsType}
+                    >
+                        Places
+                    </Button>
+                    <Button className="col-6"
+                        variant={resultsToggle ? 'outline-dark' : 'dark'}
+                        onClick={this.toggleResultsType}
+                    >
+                        Users
+                    </Button>
+                </div>
                             
                 
                 <ListGroup>
