@@ -106,7 +106,6 @@ class FriendsList extends Component {
                     )
                 })}
                 
-
                 {pageNumbers.length > 0 ? 
                     <Container className="my-4">
                         <Pagination style={ {justifyContent: 'center'}}>

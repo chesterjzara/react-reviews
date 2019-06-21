@@ -10,8 +10,12 @@ import Container from 'react-bootstrap/Container'
 
 // Child Components
 import UserAuth from './components/UserAuth'
-import About from './components/About'
-import Navigation from './components/Navigation'
+
+import About from './components/misc/About'
+import Welcome from './components/misc/Welcome'
+import Navigation from './components/misc/Navigation'
+import Homepage from './components/misc/Homepage'
+import SearchResults from './components/misc/SearchResults'
 
 import MapContainer from './components/map/MapContainer'
 
@@ -19,15 +23,16 @@ import Friends from './components/friends/Friends'
 import FriendSingle from './components/friends/FriendSingle';
 
 import Places from './components/places/Places'
-import ReviewNew from './components/places/ReviewNew'
 import PlaceSingle from './components/places/PlaceSingle';
+import ReviewNew from './components/places/ReviewNew'
+import ReviewEdit from './components/places/ReviewEdit';
 
 require('dotenv').config()
 
 
 // Constants
-// const baseAPI = 'http://localhost:3000'
-const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
+const baseAPI = 'http://localhost:3000'
+// const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
 export { baseAPI }
 
 class App extends Component {
@@ -91,7 +96,7 @@ class App extends Component {
 		)
 	}
 
-	// Friends Methods and Components
+	// Friends Components Render with props
 	renderFriends(props) {
 		return (
 			< Friends 
@@ -111,16 +116,7 @@ class App extends Component {
 		)
 	}
 
-	// Places Methods and Components
-	renderReviewNew(props) {
-		return (
-			< ReviewNew 
-				loginUser={this.state.loginUser}
-				{...props}
-				
-			/>
-		)
-	}
+	// Places Components Render with props
 	renderPlaces(props) {
 		return (
 			< Places 
@@ -138,7 +134,44 @@ class App extends Component {
 			/>
 		)
 	}
+	renderReviewNew(props) {
+		return (
+			< ReviewNew 
+				loginUser={this.state.loginUser}
+				{...props}
+				
+			/>
+		)
+	}
+	renderReviewEdit(props) {
+		return (
+			< ReviewEdit 
+				loginUser={this.state.loginUser}
+				{...props}
+				
+			/>
+		)
+	}
+	renderSearchResults(props) {
+		return (
+			< SearchResults 
+				loginUser={this.state.loginUser}
+				{...props}	
+			/>
+		)
+	}
 
+	// Misc Component Render 
+	renderHomepage(props) {
+		return (
+			< Homepage 
+				loginUser={this.state.loginUser}
+				{...props}	
+			/>
+		)
+	}
+
+	// React LifeCycle Methods
 	componentWillMount() {
 		// if(localStorage.getItem('reviews-jwt') != null) {
 		// 	this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
@@ -166,11 +199,8 @@ class App extends Component {
 		
 	}
 	componentDidMount() {
-		// if(localStorage.getItem('reviews-jwt') != null) {
-		// 	this.handleLoggedInUser(localStorage.getItem('reviews-jwt'))
-		// }
+		
 	}
-
 	render() {
 		if(this.state.loading === true) {
 			return (
@@ -187,23 +217,53 @@ class App extends Component {
 						handleLogOut={this.handleLogOut}
 						loginUser={this.state.loginUser}
 					/>
-				
 					<Container>
 						<Switch>
-							<Route path='/map' component={MapContainer}  />
+							{/* User Routes */}
+							<Route path="/users" 
+								render={(props) => this.renderUserAuth(props)} 
+							/>
 							
-							<Route path="/places/:place_id" render={(props) => this.renderPlaceSingle(props)} />
-							<Route path='/places' render={(props) => this.renderPlaces(props)} />
-														
-							<Route path="/users" render={(props) => this.renderUserAuth(props)} />
-							{/* <Route path='/reviews/new' component={ReviewNew}  /> */}
-							<Route path='/reviews/new' render={(props) => this.renderReviewNew(props)}  />
-	
-							<Route path="/friends/:user_id" render={(props) => this.renderFriendSingle(props)} />
-							<Route path="/friends" render={(props) =>  this.renderFriends(props)} />
-							<Route path="/about" component={About} />
+							{/* Places, Map, Reviews */}
+							<Route path="/places/:place_id" 
+								render={(props) => this.renderPlaceSingle(props)} 
+							/>
+							<Route path='/places' 
+								render={(props) => this.renderPlaces(props)} 
+							/>
+							<Route path='/map' 
+								component={MapContainer}  
+							/>
+							<Route path='/reviews/new' 
+								render={(props) => this.renderReviewNew(props)}  
+							/>
+							<Route path='/reviews/edit' 
+								render={(props) => this.renderReviewEdit(props)}  
+							/>
+
+							{/* Friends */}
+							<Route path="/friends/:user_id" 
+								render={(props) => this.renderFriendSingle(props)} 
+							/>
+							<Route path="/friends" 
+								render={(props) =>  this.renderFriends(props)} 
+							/>
 							
-							{/* <Route path="/" component={Welcome} /> */}
+							{/* Other Routes  */}
+							<Route path="/about" 
+								component={About} 
+							/>
+							< Route path="/search"
+								render={(props) => this.renderSearchResults(props)}
+							/>
+							<Route path="/welcome" 
+								component={Welcome} 
+							/>
+							< Route path="/"
+								render={(props) => this.renderHomepage(props)}
+							/>
+							
+
 						</Switch>
 					</Container>
 	 			</Router>
