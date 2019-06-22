@@ -136,32 +136,11 @@ class ReviewNew extends Component {
 					address={address}
 					showStatsTags={false}
 				/>
-				
-				{/* <form onSubmit={this.handleSubmit}>
-					<h2>Category/Tag</h2>
-					<AsyncCreatableSelect 
-						cacheOptions
-						loadOptions={this.getTypeOptions}
-						defaultOptions
-						onChange={(opt) => this.handleInputChange(opt)}
-					/>
-					<h2>Review</h2>
-					<input type="number" id="rating" name="rating" min="1" max="10"
-						value={this.state.rating}
-						onChange={this.handleChange}
-					/>
-					<textarea id="reviewText" 
-						value={this.state.reviewText} 
-						onChange={this.handleChange}
-						placeholder="Add any review info for your friends."
-					></textarea>
-					<button type="submit">Save Review</button>
-				</form> */}
 
 				<Form
 					onSubmit={this.handleSubmit}	
 				>
-					<Form.Group>
+					<FormGroup>
 						< FormLabel > Choose an existing Tag or enter a new Tag </FormLabel>
 						<AsyncCreatableSelect 
 							cacheOptions
@@ -170,9 +149,9 @@ class ReviewNew extends Component {
 							onChange={(opt) => this.handleInputChange(opt)}
 							required
 						/>
-					</Form.Group>
+					</FormGroup>
 
-					<Form.Group>
+					<FormGroup>
 						<FormLabel>Rating (0-10)</FormLabel> <br/>
 						<input type="number" id="rating" 
 							name="rating" min="1" max="10"
@@ -182,9 +161,9 @@ class ReviewNew extends Component {
 							className='col-12'
 							required
 						/>
-					</Form.Group>
+					</FormGroup>
 
-					<Form.Group>
+					<FormGroup>
 						<FormLabel>Review</FormLabel> <br/>
 						<textarea id="reviewText" 
 							value={this.state.reviewText} 
@@ -194,7 +173,7 @@ class ReviewNew extends Component {
 							style={{height : '20vh'}}
 							required
 						></textarea>
-					</Form.Group>
+					</FormGroup>
 					<Button type="submit">Save Review</Button>
 				</Form>
 			</div>

@@ -4,6 +4,8 @@ import {Redirect} from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
+import Suggestion from './Suggestion';
+import { Link } from 'react-router-dom/cjs/react-router-dom';
 
 class Homepage extends Component {
     constructor(props) {
@@ -64,16 +66,34 @@ class Homepage extends Component {
                             <InputGroup.Append>
                                 <Button variant="outline-success" type="submit">Search</Button>
                             </InputGroup.Append>
-                            <br/>
-                            <p className="text-muted p-2 my-1">
+                            
+                        </InputGroup>
+                        <p className="text-muted p-2 my-1">
                                 You can search for place names, review text, tags, or friends names.
                             </p>
-                        </InputGroup>
                     </Form.Group>
                 </Form>    
 
-                <hr style={{border: '2px solid navy' }}/>
-            
+                <hr style={{borderBottom: '2px solid navy' }}/>
+                <h3>Can't decide?</h3>
+                <div className="grid-container">
+                    <img src="./img/tacos.jpg" alt=""/>
+                    <img src="./img/pho.jpg" alt=""/>
+                    <img src="./img/drinks.jpg" alt=""/>
+                    <img src="./img/museum.jpg" alt=""/>
+                    <Link  to='/suggestion'> 
+                        <Button id="suggestion-button"> 	
+                            Let us make a suggestion! 
+                        </Button> 
+                    </Link>
+                    <img src="./img/pasta.jpg" alt=""/>
+                    <img src="./img/zoo.jpg" alt=""/>
+                    <img src="./img/coffee.jpg" alt=""/>
+                    <img src="./img/symphony.jpg" alt=""/>
+                    
+                </div>
+                
+
             </React.Fragment>
         )
         

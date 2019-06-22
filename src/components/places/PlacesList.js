@@ -59,7 +59,12 @@ class PlacesList extends Component {
                             < div className="mr-0 text-center p-2">
                                     {item.rating} / 10 <br/>
                                     {myList ? 
-                                        <Button variant="primary" className="m-2">Edit</Button>
+                                        <Link to={{
+                                            pathname: `/reviews/edit`,
+                                            state: item
+                                        }}>
+                                            <Button variant="primary" className="m-2">Edit</Button>
+                                        </Link>
                                         :
                                         <Link to={{
                                             pathname: `/places/${item.place_id}`,

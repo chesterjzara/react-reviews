@@ -45,3 +45,32 @@ code {
   height: 100%;
   border-radius: 50%
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 20vh);
+  grid-template-areas: 
+    "top-left top-center top-right"
+    "mid-left mid-center mid-right"
+    "bot-left bot-center bot-right";
+  grid-gap: 5px
+}
+
+.grid-container > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#suggestion-button {
+  height: 100%;
+  width: 100%
+}
+
+@media only screen and (min-width: 600px) {
+  .place-image-container {
+    width: 100%;
+    height: 40vh;
+  }
+}

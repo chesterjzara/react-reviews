@@ -6,13 +6,17 @@ import Button from 'react-bootstrap/Button'
 
 class PlaceInfo extends Component {
 	render() {
-        const {place_name, google_url, address, stats, showStatsTags, activeTag, toggleTag} = this.props
+        const {place_name, google_url, address, stats, showStatsTags, activeTag, toggleTag, place_img} = this.props
     	return (
 			<React.Fragment>
                 <h3>  {place_name} </h3>
-                <div className="place-image-container">
-                    <img src={pizza} alt=""/>
-                </div>
+                {place_img ? 
+                    <div className="place-image-container">
+                        <img src={place_img} alt=""/>
+                    </div>
+                    : ''
+                }
+                
                 <a href={google_url}>Link to Google Maps</a>
                 <h5> {address} </h5>
                 {showStatsTags ? 
@@ -27,7 +31,7 @@ class PlaceInfo extends Component {
                                         key={index}
                                         id={tag} 
                                         variant={activeTag === tag ? 'dark' : 'outline-dark'}
-                                        onClick={this.toggleTag}
+                                        onClick={toggleTag}
                                     >
                                         {tag} 
                                     </Button>

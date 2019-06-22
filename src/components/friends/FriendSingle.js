@@ -170,7 +170,7 @@ class FriendSingle extends Component {
       	return (
 			<React.Fragment >
 				<div className="col-12 d-flex flex-column justify-content-center mx-auto">
-					<h1 class="text-center"> 
+					<h1 className="text-center"> 
 						{viewedUser.first_name} {viewedUser.last_name}
 					</h1>
 					<div className="user-image-container text-center mx-auto">

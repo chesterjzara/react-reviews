@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { GoogleApiWrapper } from 'google-maps-react';
 
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
@@ -14,10 +15,9 @@ import Modal from 'react-bootstrap/Modal'
 // let photoRef = 'add in photo references from '
 // let placeId= 'enter placeId here'
 
-// let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
 
-// let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}
-// `
+
+// let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}`
 
 class PlaceSingle extends Component {
     constructor(props) {
@@ -29,7 +29,8 @@ class PlaceSingle extends Component {
             allPlaceInfo: [],
             activeTag: '',
             modalShow: false,
-            toPlaces: false
+            toPlaces: false,
+            place_img : ''
         }
     }
     
@@ -61,11 +62,38 @@ class PlaceSingle extends Component {
         }
     }
     
-    getPlacePhoto = () => {
+    getPlacePhoto = async () => {
+        let {google} = this.props
+        console.log('google-',google)
         let place_id = this.props.match.params.place_id
+        console.log('placeid',place_id)
 
-        console.log(this.props.location.state)
+        let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
+        
+        let request = {
+            placeId: place_id,
+            fields: ['photo']
+        }
+        console.log('request', request)
+        
+        let service = new google.maps.places.PlacesService(document.createElement('div'));
+        console.log('service', service)
+        
+        service.getDetails(request, this.photoCallback)
     }
+    photoCallback = (photoRes,b) => {
+        console.log('hit callback')
+        console.log(b)
+        console.log(photoRes)
+        
+        let url = photoRes.photos[0].getUrl({maxHeight: 600})
+        
+        this.setState({
+            place_img : url
+        })
+
+    }
+
     getPlaceInfo = async () => {
         let place_id = this.props.match.params.place_id
         let login_user_id = this.props.loginUser.user_id
@@ -137,7 +165,7 @@ class PlaceSingle extends Component {
     }
 
     componentWillMount() {
-        this.getPlacePhoto()
+        // this.getPlacePhoto()
         
         this.getPlaceInfo()
       
@@ -145,7 +173,7 @@ class PlaceSingle extends Component {
     
     
     render() {
-        
+
         if(this.state.loading) {
             return <h1>Loading...</h1>
         }
@@ -184,6 +212,7 @@ class PlaceSingle extends Component {
                 <Container>
                     <PlaceInfo 
                         place_name={place_name}
+                        place_img={this.state.place_img}
                         google_url={google_url}
                         address={address}
                         stats={stats}
@@ -255,5 +284,7 @@ class PlaceSingle extends Component {
       }
     	
 }
-export default PlaceSingle;
+export default GoogleApiWrapper({
+    apiKey: (process.env.REACT_APP_DEV_GOOGLE_API_KEY)
+})(PlaceSingle);
 

@@ -26,13 +26,14 @@ import Places from './components/places/Places'
 import PlaceSingle from './components/places/PlaceSingle';
 import ReviewNew from './components/places/ReviewNew'
 import ReviewEdit from './components/places/ReviewEdit';
+import Suggestion from './components/misc/Suggestion';
 
 require('dotenv').config()
 
 
 // Constants
-// const baseAPI = 'http://localhost:3000'
-const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
+const baseAPI = 'http://localhost:3000'
+// const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
 export { baseAPI }
 
 class App extends Component {
@@ -71,15 +72,6 @@ class App extends Component {
 		let jsonToken = await checkTokenRes.json()
 		
 		return jsonToken;
-		// if(jsonToken.auth) {
-		// 	this.setState({
-		// 		loginUser: {
-		// 			user_id: jsonToken.user.user_id,
-		// 			user_token: token
-		// 		}
-		// 	})
-		// 	console.log('Set login user:', this.state.loginUser)
-		// }
 	}
 	handleLogOut = () => {
 		localStorage.removeItem('reviews-jwt')
@@ -148,7 +140,6 @@ class App extends Component {
 			< ReviewEdit 
 				loginUser={this.state.loginUser}
 				{...props}
-				
 			/>
 		)
 	}
@@ -165,6 +156,14 @@ class App extends Component {
 	renderHomepage(props) {
 		return (
 			< Homepage 
+				loginUser={this.state.loginUser}
+				{...props}	
+			/>
+		)
+	}
+	renderSuggestion(props) {
+		return (
+			< Suggestion 
 				loginUser={this.state.loginUser}
 				{...props}	
 			/>
@@ -258,6 +257,9 @@ class App extends Component {
 							/>
 							<Route path="/welcome" 
 								component={Welcome} 
+							/>
+							<Route path="/suggestion" 
+								render={(props) => this.renderSuggestion(props)}
 							/>
 							< Route path="/"
 								render={(props) => this.renderHomepage(props)}
