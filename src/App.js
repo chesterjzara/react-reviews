@@ -32,8 +32,8 @@ require('dotenv').config()
 
 
 // Constants
-const baseAPI = 'http://localhost:3000'
-// const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
+// const baseAPI = 'http://localhost:3000'
+const baseAPI = 'https://afternoon-wildwood-34844.herokuapp.com'
 export { baseAPI }
 
 class App extends Component {
