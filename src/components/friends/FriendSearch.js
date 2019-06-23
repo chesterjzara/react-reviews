@@ -24,11 +24,9 @@ class FriendSearch extends Component {
     }
     handleSearchSubmit = async (event) => {
         event.preventDefault();
-        console.log('do search submit:',this.state.searchName)
         let search_term = this.state.searchName.split(' ').join(' | ')
         let searchInfo = { searchTerm: search_term}
 
-        console.log(searchInfo)
 
         try{
             let searchRes = await fetch(baseAPI + `/friends/search/fulltext`, {
@@ -43,7 +41,7 @@ class FriendSearch extends Component {
 			    }
             })
             let searchResults = await searchRes.json()
-            console.log(searchResults)
+            //console.log(searchResults)
             this.setState({
                 searchArray: searchResults,
                 searchName : '',

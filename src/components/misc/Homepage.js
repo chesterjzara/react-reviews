@@ -41,7 +41,7 @@ class Homepage extends Component {
             //     queryString += `${term}&`
             // }
             let queryString = this.state.searchTermArray.join('&')
-            console.log(queryString)
+            // console.log(queryString)
             return < Redirect to={`/search?${queryString}`} />
         }
 

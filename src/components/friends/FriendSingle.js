@@ -34,7 +34,7 @@ class FriendSingle extends Component {
 			}
         })
         let jsonUser = await userRes.json()
-		console.log('Single user lookup:',jsonUser)
+		// console.log('Single user lookup:',jsonUser)
 		this.setState({
 			viewedUser: jsonUser
 		}, ()=> {this.getPlacesLists()})
@@ -52,7 +52,7 @@ class FriendSingle extends Component {
 			}
 		})
 		let jsonMyPlaces = await myPlacesRes.json();
-		console.log(jsonMyPlaces)
+		// console.log(jsonMyPlaces)
 		this.setState({
 			placesArray : jsonMyPlaces
 		})
@@ -115,7 +115,7 @@ class FriendSingle extends Component {
             return [ ]
         }
         while( pageNumbers.length < 3 && (pageNumbers.length < maxPages - 1) ) {
-            console.log(pageNumbers)
+            // console.log(pageNumbers)
             if( (currentPage + counter) < (maxPages) ) {
                 pageNumbers.push(currentPage + counter)
             }
@@ -150,7 +150,7 @@ class FriendSingle extends Component {
     }
 
 	componentWillMount() {
-		console.log('In willMount')
+		// console.log('In willMount')
 		this.getUserInfo()
 	}
 	componentWillUpdate() {

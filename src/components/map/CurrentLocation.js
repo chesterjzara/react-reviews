@@ -33,7 +33,7 @@ class CurrentLocation extends React.Component {
     }
 
     recenterMap() {
-        console.log('Recenter Map')
+        // console.log('Recenter Map')
         // const map = this.map;
         const currentLoc = this.state.currentLocation
         // const google = google
@@ -47,7 +47,7 @@ class CurrentLocation extends React.Component {
     }
     
     loadMap() {
-        console.log('Load Map - CurrentLocation this', this)
+        // console.log('Load Map - CurrentLocation this', this)
     
         if(this.props && this.props.google) {
             // Grabbing google, maps, zoom from the props for concise variable names
@@ -79,9 +79,8 @@ class CurrentLocation extends React.Component {
     }
 
     onPlacesChanged(places) {
-        console.log('hit on places changed')
-        console.log(places)
-        console.log(this)
+        // console.log('hit on places changed', places, this)
+        
         this.createMarker(places[0])
         this.map.setCenter(places[0].geometry.location)
     }
@@ -128,8 +127,8 @@ class CurrentLocation extends React.Component {
     }
 
     saveToUserPlaces = () => {
-        console.log('save to places')
-        console.log(this.state.currentPlace)
+        // console.log('save to places', this.state.currentPlace)
+
         this.setState({
             toReviewNew : true
         })
@@ -137,7 +136,7 @@ class CurrentLocation extends React.Component {
     }
 
     componentDidMount() {
-        console.log('DidMount')
+        // console.log('DidMount')
         if (navigator && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition( pos => {
                 const coords = pos.coords
@@ -152,7 +151,7 @@ class CurrentLocation extends React.Component {
         this.loadMap()
     }
     componentDidUpdate(prevProps, prevState) {
-        console.log('DidUpdate', prevProps.google, this.props.google)
+        // console.log('DidUpdate', prevProps.google, this.props.google)
         if (prevProps.google !== this.props.google) {
             this.loadMap();
         }
@@ -178,8 +177,6 @@ class CurrentLocation extends React.Component {
     }
 
     render() {
-        console.log('Render...')
-
         if(this.state.toReviewNew === true) {
             // return < Redirect to='/reviews/new' />
             return < Redirect to={{ 

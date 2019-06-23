@@ -18,8 +18,6 @@ class FriendsList extends Component {
     }
   
     pageClick = (event) => {
-        console.log('in click')
-        console.log(event.target.id)
         this.setState({
             currentPage : parseInt(event.target.id)
         })
@@ -31,12 +29,12 @@ class FriendsList extends Component {
 
         let pageNumbers = [currentPage]
         let counter = 1
-        console.log('max pages', maxPages)
+        
         if(maxPages === 0) {
             return [ ]
         }
         while( pageNumbers.length < 3 && (pageNumbers.length < maxPages - 1) ) {
-            console.log(pageNumbers)
+            
             if( (currentPage + counter) < (maxPages) ) {
                 pageNumbers.push(currentPage + counter)
             }

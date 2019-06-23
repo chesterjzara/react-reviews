@@ -38,7 +38,6 @@ class ReviewEdit extends Component {
 	}
 	handleSubmit = async (event) => {
 		event.preventDefault()
-		console.log("submit here")
 		const { entry_id, place_id, address, place_name, google_url } = this.props.location.state
 		let reviewUpdateInfo = { 
 			entry_id: entry_id,
@@ -86,7 +85,7 @@ class ReviewEdit extends Component {
 	}
 
 	handleInputChange = (newValue) => {
-		console.log(newValue)
+		// console.log(newValue)
 		this.setState({ 
 			inputValue: {
 				value: newValue.value,
@@ -99,17 +98,17 @@ class ReviewEdit extends Component {
 	// 	this.setState({typeId: value.id});
 	// }
 	getTypeOptions = (inputValue) => {
-		console.log('get type options',inputValue)
+		// console.log('get type options',inputValue)
 
 		return fetch(baseAPI + `/places/tags`)
 			.then(res => res.json())
 			.then( json => {
-				console.log('json:',json)
+				// console.log('json:',json)
 				let options = json
 				options = options.filter( (i) => {
 					return i.label.toLowerCase().includes(inputValue.toLowerCase())
 				});
-				console.log(options)
+				// console.log(options)
 				return options
 			})
 	}

@@ -52,7 +52,6 @@ class SearchResults extends Component {
         this.getSearchResults(search_string)
     }
     getSearchResults = async (search_string) => {
-        console.log('fetching search results')
         const reviewSearchRes = await fetch(baseAPI + `/places/search`, {
             method: 'POST',
             body: JSON.stringify({ search_string : search_string}),
@@ -65,7 +64,7 @@ class SearchResults extends Component {
 			}
         })
         const jsonSearch = await reviewSearchRes.json()
-        console.log(jsonSearch)
+        // console.log(jsonSearch)
 
         this.setState({
             placesArray: jsonSearch,
@@ -85,7 +84,7 @@ class SearchResults extends Component {
             }
         })
         let jsonUserSearch = await userSearchRes.json()
-        console.log(jsonUserSearch)
+        // console.log(jsonUserSearch)
 
         this.setState( (prevState) => {
             return {
@@ -95,7 +94,6 @@ class SearchResults extends Component {
             }
         }, () => { 
             let reconsituted_params = this.state.searchTermArray.join('&')
-            console.log(reconsituted_params,'- param attempt')
             if(reconsituted_params !== '') {
                 this.props.history.push(`/search?${reconsituted_params}`) 
             }

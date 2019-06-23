@@ -14,7 +14,7 @@ export class MapContainer extends Component {
         }
     }
     render() {
-        console.log('MapContainer Render - google:', this.props.google)
+        // console.log('MapContainer Render - google:', this.props.google)
 
         return (
             < CurrentLocation
