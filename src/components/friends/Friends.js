@@ -31,19 +31,17 @@ class Friends extends Component {
 			}
         })
         let jsonAccept = await acceptRequestRes.json()
-        console.log('Accepted request', jsonAccept)
+        console.log(jsonAccept)
         this.getFriendList()
     }
     
 
     updateStateReject = (array, arrayIndex, user_id) => {
-        console.log('params:', array, arrayIndex, user_id)
         this.setState(prevState => {
             
             let friendIndex = prevState.friendArray.findIndex( (current, index, arr) => {
                 return current.friend_id === user_id;
             })
-            console.log('Friend index:', friendIndex)
 
             prevState[array].splice(arrayIndex, 1)
             if(friendIndex !== -1) {
@@ -66,13 +64,12 @@ class Friends extends Component {
 				'x-access-token' : this.props.loginUser.user_token
 			}
 		})
-		let jsonDelete = await cancelRequestRes.json()
-		console.log('Cancelled Request', jsonDelete)
+        let jsonDelete = await cancelRequestRes.json()
+        console.log(jsonDelete)
 		this.updateStateReject(arrayName, index, user_id)
     }
     
     getPendingAndSentRequests = async () => {
-		console.log('start get pend/sent')
 		let pendingRes = await fetch(baseAPI + '/friends/request/pending', {
             method: 'GET',
             withCredentials: true,
@@ -97,8 +94,6 @@ class Friends extends Component {
         })
 		let jsonSent = await sentRes.json()
 		 
-		console.log('Pending',jsonPending)
-		console.log('Sent',jsonSent)
 		this.setState({
 			pendingArray : jsonPending,
             sentArray : jsonSent,
@@ -117,7 +112,6 @@ class Friends extends Component {
 			}
         })
         let jsonFriends = await friendListRes.json()
-        console.log(jsonFriends)
         this.setState({
             friendArray: jsonFriends
         }, () => this.getPendingAndSentRequests())

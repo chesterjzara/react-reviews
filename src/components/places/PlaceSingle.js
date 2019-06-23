@@ -47,7 +47,7 @@ class PlaceSingle extends Component {
 			}
         })
         let jsonDelete = await deleteRes.json()
-        console.log(jsonDelete)
+        // console.log(jsonDelete)
         if(!jsonDelete.status) {
             this.setState({
                 toPlaces : true
@@ -57,9 +57,9 @@ class PlaceSingle extends Component {
     
     getPlacePhoto = async () => {
         let {google} = this.props
-        console.log('google-',google)
+        // console.log('google-',google)
         let place_id = this.props.match.params.place_id
-        console.log('placeid',place_id)
+        // console.log('placeid',place_id)
 
         // let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
         
@@ -67,18 +67,14 @@ class PlaceSingle extends Component {
             placeId: place_id,
             fields: ['photo']
         }
-        console.log('request', request)
+        // console.log('request', request)
         
         let service = new google.maps.places.PlacesService(document.createElement('div'));
-        console.log('service', service)
+        // console.log('service', service)
         
         service.getDetails(request, this.photoCallback)
     }
     photoCallback = (photoRes,b) => {
-        console.log('hit callback')
-        console.log(b)
-        console.log(photoRes)
-        
         let url = photoRes.photos[0].getUrl({maxHeight: 600})
         
         this.setState({
@@ -102,7 +98,7 @@ class PlaceSingle extends Component {
 			}
         })
         let jsonPlaceInfo = await placeInfoRes.json()
-        console.log(jsonPlaceInfo)
+        // console.log(jsonPlaceInfo)
         
         let myInfoIndex = jsonPlaceInfo.findIndex((review, index) => {
             return review.user_id === login_user_id
@@ -114,8 +110,8 @@ class PlaceSingle extends Component {
             friendReviewInfo.splice(myInfoIndex, 1)
         }
 
-        console.log(myReviewInfo)
-        console.log(friendReviewInfo)
+        // console.log(myReviewInfo)
+        // console.log(friendReviewInfo)
 
         
 
@@ -178,7 +174,7 @@ class PlaceSingle extends Component {
         const {address, google_url, place_name }= allReviews[0]
         
         let stats = this.calculateStats()
-        console.log(stats)
+        // console.log(stats)
 
         // address, date_added, entry_id, first_name, google_url, last_name, place_id, place_name, rating, review, tag_id, tag_name, user_id
         let activeTag = this.state.activeTag

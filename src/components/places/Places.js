@@ -38,7 +38,6 @@ class Places extends Component {
             return [ ]
         }
         while( pageNumbers.length < 3 && (pageNumbers.length < maxPages - 1) ) {
-            console.log(pageNumbers)
             if( (currentPage + counter) < (maxPages) ) {
                 pageNumbers.push(currentPage + counter)
             }
@@ -78,7 +77,7 @@ class Places extends Component {
 			}
 		})
 		let jsonMyPlaces = await myPlacesRes.json();
-		console.log(jsonMyPlaces)
+		// console.log(jsonMyPlaces)
 		this.setState({
 			myPlacesArray : jsonMyPlaces
 		}, () => this.getFriendsPlaces())
@@ -96,7 +95,7 @@ class Places extends Component {
 			}
 		})
 		let jsonFriendsPlaces = await friendsPlacesRes.json();
-		console.log(jsonFriendsPlaces)
+		// console.log(jsonFriendsPlaces)
 		this.setState({
 			friendsPlacesArray : jsonFriendsPlaces,
 			loading: false

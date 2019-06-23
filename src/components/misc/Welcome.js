@@ -37,7 +37,7 @@ class Welcome extends Component {
 				}
 			})
 			let jsonLogin = await loginRes.json()
-			console.log('Login response:', jsonLogin)
+			// console.log('Login response:', jsonLogin)
 			if(jsonLogin.auth) {
 				this.props.handleSetLoginUser(jsonLogin)
 				this.setState({

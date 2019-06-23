@@ -40,7 +40,7 @@ class Suggestion extends Component {
 			}
         })
         let jsonSuggestion = await suggestionRes.json()
-        console.log(jsonSuggestion)
+        // console.log(jsonSuggestion)
 
         let placeTracker = {}
         let aggregatedSuggestions = []
@@ -81,7 +81,7 @@ class Suggestion extends Component {
                 })
             }
         } )
-        console.log(aggregatedSuggestions)
+        // console.log(aggregatedSuggestions)
 
 
         this.setState({
@@ -94,15 +94,15 @@ class Suggestion extends Component {
     }
 
     handleMultiChange = (options, event) => {
-        console.log(options)
-        console.log(event)
+        // console.log(options)
+        // console.log(event)
         if(options === null) {
             return
         }
         let newFriendsOptions = options.map( (item)=> {
             return (item.value)
         })
-        console.log(newFriendsOptions)
+        // console.log(newFriendsOptions)
         this.setState((prevState) => {
             return { [event.name] : newFriendsOptions }
         }, () => this.getAvailableTags())
@@ -120,7 +120,7 @@ class Suggestion extends Component {
 			}
         })
         let jsonParams = await suggestParamRes.json()
-        console.log(jsonParams)
+        // console.log(jsonParams)
 
         this.setState({ 
             friendOptions: jsonParams,
@@ -140,7 +140,7 @@ class Suggestion extends Component {
 			}
         })
         let jsonTags = await availableTagsRes.json()
-        console.log('Tags returned',jsonTags)
+        // console.log('Tags returned',jsonTags)
 
         this.setState({
             tagOptions: jsonTags
@@ -148,7 +148,7 @@ class Suggestion extends Component {
     }
     
     componentWillMount() {
-        console.log('Will render')
+        // console.log('Will render')
         this.getFriendsAndTags()
     }
 

@@ -18,7 +18,6 @@ class FriendRequests extends Component {
 	}
 	
 	render() {
-		console.log('Friend Request render')
 		const { pendingArray, sentArray } = this.props
 
 		if(pendingArray.length < 1 && sentArray.length < 1) {
