@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import pizza from './test_pizza.jpg'
+// import pizza from './test_pizza.jpg'
 
 import Button from 'react-bootstrap/Button'
 

@@ -7,9 +7,6 @@ import Pagination from 'react-bootstrap/Pagination'
 import Container from 'react-bootstrap/Container'
 
 class PlacesList extends Component {
-	constructor(props)  {
-		super(props)
-	}
 	render() {
         
         const { placesArray, placesCurrentPage, itemPerPage, whichCurrentPage, myList} = this.props
@@ -99,7 +96,11 @@ class PlacesList extends Component {
                     </Container>
                     : 
                     < Container >
-                        <h3>No reviews found.</h3>
+                        <Card>
+                            <Card.Title className="my-3 text-center">
+                                No reviews found.
+                            </Card.Title>
+                        </Card>
                     </Container>
 
                 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch, BrowserRouter as Router } from 'react-router-dom'
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 
 // import logo from './logo.svg';
 import './App.css';
@@ -27,6 +27,7 @@ import PlaceSingle from './components/places/PlaceSingle';
 import ReviewNew from './components/places/ReviewNew'
 import ReviewEdit from './components/places/ReviewEdit';
 import Suggestion from './components/misc/Suggestion';
+
 
 require('dotenv').config()
 
@@ -169,6 +170,14 @@ class App extends Component {
 			/>
 		)
 	}
+	renderWelcome(props) {
+		return (
+			< Welcome
+				handleSetLoginUser={this.handleSetLoginUser}
+				{...props}
+			/>
+		)
+	}
 
 	// React LifeCycle Methods
 	componentWillMount() {
@@ -256,7 +265,7 @@ class App extends Component {
 								render={(props) => this.renderSearchResults(props)}
 							/>
 							<Route path="/welcome" 
-								component={Welcome} 
+								render={(props) => this.renderWelcome(props)}
 							/>
 							<Route path="/suggestion" 
 								render={(props) => this.renderSuggestion(props)}

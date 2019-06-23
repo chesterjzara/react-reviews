@@ -6,9 +6,6 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
-import Row from 'react-bootstrap/Row'
-import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
 
 class SearchResults extends Component {
     constructor(props) {
@@ -99,7 +96,7 @@ class SearchResults extends Component {
         }, () => { 
             let reconsituted_params = this.state.searchTermArray.join('&')
             console.log(reconsituted_params,'- param attempt')
-            if(reconsituted_params != '') {
+            if(reconsituted_params !== '') {
                 this.props.history.push(`/search?${reconsituted_params}`) 
             }
             
@@ -182,15 +179,15 @@ class SearchResults extends Component {
                         :
                         <div>
                             {userArray.map( (item, index) => {
-                                let variant, dispStatus
+                                let dispStatus
                                 if(item.status === 'pending') {
-                                    variant = 'warning'; dispStatus = 'Request sent!' 
+                                    dispStatus = 'Request sent!' 
                                 }
                                 else if(item.status === 'confirmed') {
-                                    variant = 'primary'; dispStatus = 'Friend'
+                                    dispStatus = 'Friend'
                                 }
                                 else if (item.status === null) {
-                                    variant = 'light'; dispStatus = 'Not friended'
+                                    dispStatus = 'Not friended'
                                 }
                                 return(
                                     <ListGroup.Item key={index}

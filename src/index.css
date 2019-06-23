@@ -68,9 +68,36 @@ code {
   width: 100%
 }
 
+.welcome-friends, .welcome-places, .welcome-suggest {
+  height: 26vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.welcome-container > div > h2 {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: cornflowerblue;
+  text-align: center;
+  padding: 0.5em;
+  border-radius: 5px;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.1);
+}
+.welcome-options {
+  height: 12vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 @media only screen and (min-width: 600px) {
   .place-image-container {
     width: 100%;
     height: 40vh;
+  }
+  .welcome-friends, .welcome-places, .welcome-suggest {
+    width: 80%;
+    margin: 0 auto;
   }
 }

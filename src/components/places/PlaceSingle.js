@@ -6,18 +6,11 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import { Link, Redirect } from "react-router-dom";
 
-import pizza from './test_pizza.jpg'
+// import pizza from './test_pizza.jpg'
 import { baseAPI } from '../../App';
 
 import PlaceInfo from './PlaceInfo'
 import Modal from 'react-bootstrap/Modal'
-
-// let photoRef = 'add in photo references from '
-// let placeId= 'enter placeId here'
-
-
-
-// let photoURL = `https://maps.googleapis.com/maps/api/place/photo?maxheight=200&photoreference=${photoRef}&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}`
 
 class PlaceSingle extends Component {
     constructor(props) {
@@ -68,7 +61,7 @@ class PlaceSingle extends Component {
         let place_id = this.props.match.params.place_id
         console.log('placeid',place_id)
 
-        let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
+        // let placeDetailsURL = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=photo&key=${process.env.REACT_APP_DEV_GOOGLE_API_KEY}` 
         
         let request = {
             placeId: place_id,
@@ -165,7 +158,7 @@ class PlaceSingle extends Component {
     }
 
     componentWillMount() {
-        // this.getPlacePhoto()
+        this.getPlacePhoto()
         
         this.getPlaceInfo()
       
@@ -182,14 +175,14 @@ class PlaceSingle extends Component {
         }
         
         let allReviews = this.state.allPlaceInfo
-        const {address, google_url, place_id, place_name }= allReviews[0]
+        const {address, google_url, place_name }= allReviews[0]
         
         let stats = this.calculateStats()
         console.log(stats)
 
         // address, date_added, entry_id, first_name, google_url, last_name, place_id, place_name, rating, review, tag_id, tag_name, user_id
         let activeTag = this.state.activeTag
-        let login_user_id = this.props.loginUser.user_id
+        // let login_user_id = this.props.loginUser.user_id
         let myReview = this.state.myPlaceInfo
         let friendsReviews = this.state.friendPlaceInfo
         return (

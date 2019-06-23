@@ -4,7 +4,6 @@ import {Redirect} from 'react-router-dom'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Button from 'react-bootstrap/Button'
-import Suggestion from './Suggestion';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 
 class Homepage extends Component {

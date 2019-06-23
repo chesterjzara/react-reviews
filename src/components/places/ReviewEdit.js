@@ -7,7 +7,7 @@ import AsyncCreatableSelect from 'react-select/async-creatable';
 // import Select from 'react-select'
 
 import Form from 'react-bootstrap/Form'
-import FormGroup from 'react-bootstrap/FormGroup';
+// import FormGroup from 'react-bootstrap/FormGroup';
 import FormLabel from 'react-bootstrap/FormLabel';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'
@@ -121,7 +121,9 @@ class ReviewEdit extends Component {
 		}
 		
 		// comment out this to test w/out Google Places API calls
-		const { place_id, address, place_name, google_url, tag_id, tag_name, rating, review } = this.props.location.state
+		const { place_id, address, place_name, google_url, tag_name } = this.props.location.state
+		// const { tag_id, rating, review } = this.props.location.state
+
 
 		return (
 			<div className="new-review-container">

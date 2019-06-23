@@ -119,7 +119,7 @@ class ReviewNew extends Component {
 		}
 
 		// comment out this to test w/out Google Places API calls
-		const { place_id, address, name, google_url } = this.props.location.state
+		const { address, name, google_url } = this.props.location.state
 
 		return (
 			<div className="new-review-container">

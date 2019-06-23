@@ -6,7 +6,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import NavItem from 'react-bootstrap/NavItem';
+// import NavItem from 'react-bootstrap/NavItem';
 
 class Navigation extends Component {
     render() {
@@ -40,12 +40,12 @@ class Navigation extends Component {
                         </React.Fragment>
                         :
                         <React.Fragment>
+                            < LinkContainer to='/welcome'>
+                                < Nav.Link > Welcome </ Nav.Link>
+                            </LinkContainer>
                             <LinkContainer to='/users'>
                                 < Nav.Link > Sign Up / Login </Nav.Link>
                             </LinkContainer>
-                            {/* < LinkContainer to='/about'>
-                                < Nav.Link > About </ Nav.Link>
-                            </LinkContainer> */}
                         </React.Fragment>
                         
                         }

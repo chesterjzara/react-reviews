@@ -12,7 +12,8 @@ class Places extends Component {
 			friendsPlacesArray : [],
 			myPlacesCurrentPage : 1,
 			friendsPlacesCurrentPage : 1,
-            itemPerPage : 3,
+			itemPerPage : 3,
+			loading: true
 		}
 	}
 
@@ -97,7 +98,8 @@ class Places extends Component {
 		let jsonFriendsPlaces = await friendsPlacesRes.json();
 		console.log(jsonFriendsPlaces)
 		this.setState({
-			friendsPlacesArray : jsonFriendsPlaces
+			friendsPlacesArray : jsonFriendsPlaces,
+			loading: false
 		})
 	}
 
@@ -107,7 +109,13 @@ class Places extends Component {
     }
 
 	render() {
-	    return (
+		if(this.state.loading) {
+			return (
+				<h1>Loading Places...</h1>
+			)
+		}
+		
+		return (
 			< React.Fragment>
 				< PlacesList
 					placesArray={this.state.myPlacesArray}
