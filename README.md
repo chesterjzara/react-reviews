@@ -1,68 +1,63 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Link to backend API repo - https://github.com/chesterjzara/api-reviews
 
-## Available Scripts
+## Friendly Reviews App
 
-In the project directory, you can run:
+This is a small application where users can look up places and record their own rating and recommendation/review for that place. They can also add friends and reviews of other users will only be visible if you are friends. The idea is that one good review from a close friend is often worth more than essentially anonymous reviews from people you don't know.
 
-### `npm start`
+Additionally, there is functionality to help choose a place to go when with a group of friends. You can select the friends present and the app will make a suggestion based on places your friends have reviewed.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technology Used / Credits
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+* Javascript
+* React
+  * react-router
+  * react-select
+  * react-bootstrap
+  * google-maps-react
+  * dotenv
+* Google Maps and Places API
+* CSS + Bootstrap
+* Node.js - Express server
+  * bcrypt, cors, dotenv, express, jsonwebtoken, morgan, pg
+* PostgreSQL database
+* Deployed on Heroku
 
-### `npm test`
+All mapping data and images from Google
+Stock images from unsplash - https://unsplash.com/
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## User Stories
 
-### `npm run build`
+User auth/onboarding
+ * User should hit a Welcome page and be directed to register, login, or check out a guest user
+ * User will be able to register with their name, email and password - and be signed in once submitted
+ * User will be able to login with email and password and be direct to the Home Dashboard
+ * User will be warned if submitting invalid account info
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+User Friend Workflows
+ * User can search for other users on the Friend page to friend request and send a request
+ * User can view the sent requests on their Friends page and cancel a request if needed
+ * Users can see incoming requests on their Friend page and accept or reject them
+ * Users will see a list of their friends on the Friend page
+ * Users can click a user on the Friend page to see an individual friend's page with recent reviews and option to unfriend/friend/cancel request
+ 
+Places Reviews Workflows
+  * Users are able to view their entered places on the Places page
+  * Users see their confirmed friends' places on the Places page
+    * A place can be viewed to see all friend reviews and information about the place (image, name, address, google maps link)
+  * Users are able to edit their review on a place
+  * On an individual place page users can filter reviews by the tags
+  * Users are able to locate a new place with the google maps input 
+    * Users are able to tag, rate and review a given place
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Search / Suggest
+ * From the Home Dashboard users are able to search on a keyword for places/users
+ * Users are able to get suggestions based on which friends they are with and which tags they want to limit their search to
+ 
+ 
+## Additional Improvements / Features
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+See the Issues of this repo for the full list. A few key future features:
+ * Custom styling - so things don't look totally bootstrappy
+ * More intellgient suggestion engine - search ranking, proximity weighting, suggest new places not yet visited
+ * Support for multiple tags per review
