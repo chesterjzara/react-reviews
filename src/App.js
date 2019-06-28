@@ -197,6 +197,7 @@ class App extends Component {
 						loading: false
 					})
 				}
+				console.log(data)
 				
 			})
 		} else {
