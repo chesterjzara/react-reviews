@@ -196,8 +196,13 @@ class App extends Component {
 						},
 						loading: false
 					})
+				} else {
+					console.log(data)
+					this.setState({
+						loading: false
+					})
 				}
-				console.log(data)
+				
 				
 			})
 		} else {
